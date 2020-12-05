@@ -1,0 +1,22 @@
+---
+title: "Data cleaning and exploration"
+author: "Adelaida Barrera"
+date: "12/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+
+#Exploring the data 
+
+load("data/tweets_feminists.RData")
+
+feminists %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_tweets = mean(n))
+
+feminists %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arrange(desc(min))
+
+feminists %>% filter(created_at == "2020-10-12 02:40:31")
+```
+
