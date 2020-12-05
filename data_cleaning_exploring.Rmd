@@ -20,3 +20,120 @@ feminists %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arr
 feminists %>% filter(created_at == "2020-10-12 02:40:31")
 ```
 
+```{r}
+library(quanteda)
+library(dplyr) # for easier data frame manipulation 
+library(readtext) # for getting document and their info into a data frame 
+
+
+head(feminists)
+
+#Subsetting dataset
+
+feminists <- select(feminists,
+                    user_id, created_at, text, retweet_count)
+feminists
+
+#Creating corpus
+
+feminists_corp <- corpus(feminists)
+feminists_corp
+```
+
+
+```{r}
+## Corpus structure
+
+#A corpus has two important components, the texts themselves, and information 
+#about them called 'docvars'. 
+
+#Explore docvars
+
+head(docvars(feminists_corp))
+
+tail(docvars(feminists_corp, "user_id"))
+
+#Explore text
+
+txts <- texts(feminists_corp)
+
+summary(feminists_corp)
+
+
+#The information in summary is available in different functions
+
+ndoc(feminists_corp) # document count
+docnames(feminists_corp) # unique document identifiers
+ntype(feminists_corp) # types in each document
+ntoken(feminists_corp) # tokens in each document
+nsentence(feminists_corp) # sentences in each document
+
+```
+```{r}
+#Subset on the basis of the docvars
+
+sample_accounts <- c("1354646353")
+
+#Those word and sentence counts come from the `ntype`, (vocabulary size)
+#`ntoken` (word count), and `nsentence` (sentence count)
+#functions.
+
+#Getting tokens
+
+toks <- tokens(feminists_corp)
+
+#Subsetting the tokens
+
+toks [[10]]
+
+toks [1:3]
+
+```
+```{r}
+#Removing stopwords (leaving gaps were they are)
+
+toks2 <- tokens_remove(toks, stopwords(), padding = TRUE)
+
+toks2[[1]][1:20] # first 20 tokens of document 1
+
+```
+```{r}
+#Keywords in context
+
+kw_feminism <- kwic(feminists_corp, "feminismo", window = 10)
+head(kw_feminism)
+view(kw_feminism)
+
+#Paste pre + post
+
+feminism_df <- tibble(speaker = kw_feminism$docname, 
+                   text = paste(kw_feminism$pre, kw_feminism$post, sep = " "))
+
+corp_feminism <- corpus(feminism_df)
+summary(corp_feminism)
+```
+
+
+```{r}
+# Constructing a document feature matrix
+
+corpdfm <- dfm(feminists_corp)
+
+dim(corpdfm)
+
+featnames(corpdfm)[1:40]
+docnames(corpdfm)
+
+#Removing unnecessary words
+
+corpdfm <- dfm(feminists_corp, 
+               remove = stopwords(), 
+               remove_punct = TRUE,
+               remove_numbers = TRUE)
+dim(corpdfm)
+
+featnames(corpdfm)[1:40]
+
+
+```
+
