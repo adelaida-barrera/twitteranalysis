@@ -7,24 +7,18 @@ output: html_document
 
 ```{r, include = FALSE}
 
-
 library(twitteR)
 library(tidyverse)
 library(rtweet)
 
-# Twitter API authentification 
-key <- "dUccFFYUBCdImYFvQeLVNV3ij"
-secret <- "RPLTQRvGix0sK6QKkNS0ZJq6y1lsc5nR5OGDahV77mydUYTplq"
-token <- "10536312-2A8ZzgNJi3fFzrhyyXxwCOJ2FAhvnQmXmE4zr5SRy"
-a_secret <- "l96vZK9QyHESxgd9cZ5MYBFWj1oARRU4bvAFWs0LzBmvr"
+# API authorization 
+rtweet::create_token(app = "aletheia_hertie", 
+                     consumer_key = "dUccFFYUBCdImYFvQeLVNV3ij",
+                     access_secret = "g5Zpp9lmwPfdW5JB2l4srFu8Y1BGBeNvt3BkDjcUaJJrk",
+                     access_token = "10536312-kRxNG26Yo9SWavI8ksHzOs1rhw9PGA90Kp5ioIelD",
+                     consumer_secret = "RPLTQRvGix0sK6QKkNS0ZJq6y1lsc5nR5OGDahV77mydUYTplq")
 
-setup_twitter_oauth(consumer_key = key, 
-                    consumer_secret = secret,
-                    access_token = token, 
-                    access_secret = a_secret)
 ```
-
-
 
 ```{r, echo=FALSE}
 
@@ -80,16 +74,33 @@ usernames <- c(
 influencers <- data.frame()
 
 for (i in usernames) {
-  influencers <- rbind(influencers, twitteR::userTimeline(user = i, n = 3200, includeRts = TRUE) %>% twListToDF())
-}
+  influencers <- rbind(influencers, 
+                       twitteR::userTimeline(user = i, n = 3200, includeRts = TRUE) %>%
+                         twListToDF())
+  }
 
-save(influencers, file = "data/influencers.RData")
+save(influencers, file = "data/tweets_influencers.RData")
 
 ```
 
 
 ```{r}
 
+# Read list of accounts to scrape 
+accounts_feminists <- read_csv("data/twitter_accounts_fem.csv")
 
+# Gather last 3200 tweets from each account 
+feminists <- rtweet::get_timeline(accounts_feminists$username, n = 3200)
+
+# Modify feminists dataframe in order to do left_join with tweets df
+accounts_feminists <- accounts_feminists %>% 
+  rename(screen_name = username) %>% 
+  mutate(screen_name = str_remove(screen_name, "@"))
+  
+# Add covariates included in initial list to tweets df 
+feminists <- left_join(feminists, accounts_feminists, by = "screen_name")
+
+save(feminists, file = "data/tweets_feminists.RData")
 
 ```
+
