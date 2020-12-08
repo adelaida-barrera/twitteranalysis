@@ -124,15 +124,42 @@ dim(corpdfm)
 featnames(corpdfm)[1:40]
 docnames(corpdfm)
 
-#Removing unnecessary words
+# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
 
 corpdfm <- dfm(feminists_corp, 
-               remove = stopwords(), 
-               remove_punct = TRUE,
-               remove_numbers = TRUE)
+             tolower=TRUE,
+             stem=TRUE, # Esto lo hace en inglés. Busca la raíz de la palabra. Va a tocar hacerlo aparte... 
+             remove_punct = TRUE,
+             remove_url=TRUE,
+             remove=c(stopwords("spanish")),
+             remove_numbers = TRUE,
+             verbose=TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+              
+
 dim(corpdfm)
 
 featnames(corpdfm)[1:40]
+
+##### Otros métodos para limpiar y procesar el dfm
+##### Otros métodos #####
+
+mycorpus <- Corpus(VectorSource(feminists$text))
+mycorpus <- tm_map(mycorpus, removeWords, stopwords("spanish"))
+
+# Remove URL
+remove_url <- function(x) gsub("http[^[:space:]]*","",x)
+mycorpus <- tm_map(mycorpus, content_transformer(remove_url))
+
+# Remove anything other than spanish letters and space
+remove_other <- function(x) gsub("[^[:alpha:][:space:]]*","",x)
+mycorpus <- tm_map(mycorpus, content_transformer(remove_other))
+mycorpus <- tm_map(mycorpus, content_transformer(removePunctuation))
+mycorpus <- tm_map(mycorpus, content_transformer(tolower))
+mycorpus <- tm_map(mycorpus, stripWhitespace)
+mycorpus <- tm_map(mycorpus, stemDocument)
+
+mycorpus <- corpus(mycorpus)
+mycorpus_dfm <- dfm(mycorpus_df)
 
 
 ```
