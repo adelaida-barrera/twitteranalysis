@@ -20,12 +20,11 @@ rtweet::create_token(app = "aletheia_hertie",
 
 ```{r, echo=FALSE}
 
-# Chosen institutional accounts 
+ # Chosen institutional accounts 
 institutions <- c("Campaña por el Derecho al Aborto Legal en Colombia",
 "Casa de la Mujer",
 "Católicas por el Derecho a Decidir Colombia",
 "Colombia Diversa",
-"Comisión de la Verdad",
 "Comisión Legal para la Equidad de la Mujer",
 "Comisión Nacional de Mujeres Indígenas -Colombia",
 "Compromiso Diverso -  Secretaría de Integración Bogotá",
@@ -65,7 +64,6 @@ usernames <- c("@Aborto_LegalCol",
 "@casa_la",
 "@CDD_Colombia",
 "@ColombiaDiversa",
-"@ComisionVerdadC",
 "@ComisionMujerCo",
 "@CNMIColombia",
 "@SubLGBTI",
