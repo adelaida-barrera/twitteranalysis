@@ -1,0 +1,81 @@
+---
+title: "English words"
+author: "Natalia Mejia"
+date: "9/12/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(quanteda)
+library(readtext) # for getting document and their info into a data frame 
+library(tm)
+library(lubridate)
+
+load("data/tweets_feminists.RData")
+names(feminists)
+
+#Subsetting dataset
+
+feminists <- 
+  feminists %>% 
+  select(name, 
+         screen_name, 
+         text,
+         user_id, 
+         created_at, 
+         retweet_count,
+         main_occupation,
+         institution)
+
+#Creating corpus
+feminists_corp <- corpus(feminists)
+
+
+```
+
+
+```{r}
+#Creating dfm
+
+corpdfm <- dfm(feminists_corp)
+
+
+# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features
+
+corpdfm <- dfm(feminists_corp, 
+             tolower = TRUE, # convert all words to lower case 
+             stem = TRUE, 
+             remove = c(stopwords("spanish")),
+             remove_punct = TRUE, # remove punctuation
+             remove_url = TRUE, # remove u
+             remove_numbers = TRUE,
+             remove_symbols = TRUE,
+             verbose = TRUE) 
+             
+# Remove mentions (@)
+corpdfm <- dfm_remove(corpdfm,
+                      "@*",
+                      verbose = T)
+
+#Remove hashtags         
+corpdfm <- dfm_remove(corpdfm,
+                      "#*",
+                      verbose = T)
+
+# Remove more stopwords (less than 4 characters)
+corpdfm <- dfm_keep(corpdfm,
+                    min_nchar = 4,
+                      verbose = T)
+
+#Remove stopwords in english
+
+
+corpdfm <- dfm_remove(corpdfm,
+                        stopwords(kind = quanteda_options("language_stopwords")),
+                                  verbose = T)
+
+```
+
+
