@@ -15,6 +15,11 @@ library(lubridate)
 #Exploring the data 
 
 load("data/tweets_feminists.RData")
+````
+
+# Initial exploration of the data 
+
+```{r}
 
 # Average tweets per account 
 feminists %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_tweets = mean(n))
@@ -22,10 +27,40 @@ feminists %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_twe
 # Less recent tweet by account 
 feminists %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arrange(desc(min))
 
+# Frequency of tweets across time: too skewed due to some accounts tweeting too little
+ 
+feminists <- feminists %>% 
+  mutate(created_at = as_date(created_at),
+         day_published = ymd(created_at)) 
 
-                                  
+feminists %>% 
+  group_by(day_published) %>% 
+  summarize(tweets_per_day = n()) %>% 
+    ggplot(aes(x = day_published,
+               y = tweets_per_day)) +
+    geom_line()+
+    theme_minimal()
 
+fem_jul_nov_2020 <- feminists %>% filter(day_published >= "2020-07-01")       
 
+# Frequency of tweets per day from July 2020 to November 2020: more balanced
+fem_jul_nov_2020 %>% 
+  group_by(day_published) %>% 
+  summarize(tweets_per_day = n()) %>% 
+    ggplot(aes(x = day_published,
+               y = tweets_per_day)) +
+    geom_line()+
+    theme_minimal()
+
+# Number of accounts left after trimming data : 67 
+unique(fem_jul_nov_2020$name) %>% length()
+
+# Number of tweets left after trimming: 116402 
+dim(fem_jul_nov_2020)
+
+# Removing the congressswomen to get more stable speech
+non_congress_fem_jul_nov_2020 <- fem_jul_nov_2020 %>% filter(main_occupation != "congressperson")
+save(non_congress_fem_jul_nov_2020, file = "data/pruebas/non_congress_fem_jul_nov_2020.RData")
 ```
 
 ```{r}
