@@ -1,0 +1,110 @@
+---
+title: "Topic model feminists"
+author: "Adelaida Barrera"
+date: "12/9/2020"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+library(stm)
+library(quanteda)
+
+```
+
+# Get data and clean it. Create dfm. 
+```{r}
+
+load("data/pruebas/non_congress_fem_jul_nov_2020.RData")
+
+non_congress <- non_congress_fem_jul_nov_2020
+
+non_congress <- 
+  non_congress %>% 
+  select(name, 
+         screen_name, 
+         text,
+         user_id, 
+         created_at, 
+         retweet_count,
+         main_occupation,
+         institution)
+
+#Creating corpus
+non_congress_corp <- corpus(non_congress)
+
+# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
+non_congress_dfm <- dfm(non_congress_corp, 
+             tolower = TRUE, # convert all words to lower case 
+             remove = c(stopwords("spanish")),
+             remove_punct = TRUE, # remove punctuation
+             remove_url = TRUE, # remove u
+             remove_numbers = TRUE,
+             remove_symbols = TRUE,
+             verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+            #it is better not to stem for topic models  
+             
+# Remove mentions (@)
+non_congress_dfm <- dfm_remove(non_congress_dfm,
+                      "@*",
+                      verbose = T)
+
+#Remove hashtags         
+non_congress_dfm <- dfm_remove(non_congress_dfm,
+                      "#*",
+                      verbose = T)
+
+# Remove more stopwords (less than 4 characters)
+non_congress_dfm <- dfm_keep(non_congress_dfm,
+                    min_nchar = 4,
+                      verbose = T)
+
+# Remove additional words that do not do meaningful work 
+load("additional_stopwords.RData")
+
+non_congress_dfm <- dfm_remove(non_congress_dfm,
+                    additional_stopowrds,
+                      verbose = T)
+
+sample_non_congress <- dfm_sample(x = non_congress_dfm, size = 2000, margin = "documents")
+```
+
+#Running the structural topic model
+
+```{r}
+
+stm_sample_non_congress <- asSTMCorpus(sample_non_congress)
+
+out <- prepDocuments(stm_sample_non_congress$documents, 
+                     stm_sample_non_congress$vocab, 
+                     stm_sample_non_congress$meta)
+
+model_topics_non_congress <- stm(documents = out$documents, 
+              vocab = out$vocab, 
+              K = 20, seed = 12345)
+
+summary(model_topics_non_congress)
+save(model_topics_non_congress, file = "data/pruebas/model_topics_non_congress")
+
+```
+
+#See what came out 
+
+```{r}
+
+summary(model_topics_non_congress)
+
+sample_docs <- corpus_sample(x = non_congress_corp, size = 1806)
+ 
+plot(model_topics_non_congress, type = "labels", labeltype = "prob", topics = (1:3)) # or frex, lift, score
+plot(model_topics_non_congress, type = "labels", labeltype = "prob", topics = (4:6)) 
+plot(model_topics_non_congress, type = "labels", labeltype = "prob", topics = (7:9)) 
+plot(model_topics_non_congress, type = "labels", labeltype = "prob", topics = (10:12)) 
+plot(model_topics_non_congress, type = "labels", labeltype = "prob", topics = (18:20)) 
+
+# See the topics in context 
+findThoughts(model_topics_non_congress, texts = texts(sample_docs), topics = (1:20),n = 5) # doesnt make full sense.
+
+
+```
