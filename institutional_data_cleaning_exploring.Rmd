@@ -56,7 +56,9 @@ unique(inst_jul_nov_2020$name.x) %>% length()
 
 # Number of tweets left after trimming: 25941 
 dim(inst_jul_nov_2020)
+```
 
+```{r}
 save(inst_jul_nov_2020, file = "data/pruebas/inst_jul_nov_2020.RData")
 
 ```
