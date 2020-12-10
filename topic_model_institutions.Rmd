@@ -86,6 +86,13 @@ model_topics_institutions <- stm(documents = out_i$documents,
               vocab = out_i$vocab, 
               K = 10, seed = 12345)
 
+
+
+```
+
+### Save it 
+
+```{r}
 # Save the output for future plotting or analysis 
 save(model_topics_institutions, file = "data/pruebas/model_topics_institutions")
 
@@ -131,7 +138,7 @@ gamma_terms <- td_gamma %>%
   mutate(topic = paste0("Topic ", topic),
          topic = reorder(topic, gamma))
 
-gamma_terms %>%
+topics_inst_plot <- gamma_terms %>%
   top_n(20, gamma) %>%
   ggplot(aes(topic, gamma, label = terms, fill = topic)) +
   geom_col(show.legend = FALSE) +
@@ -143,5 +150,12 @@ gamma_terms %>%
   labs(x = NULL, y = expression(gamma),
        title = "Topics by prevalence in the Colombian feminist institutions' twitter discourse",
        subtitle = "Top words that contribute to each topic")
+
+```
+
+
+```{r}
+
+ggsave("figures/topics_inst_plot.jpg")
 
 ```
