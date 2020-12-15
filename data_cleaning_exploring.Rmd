@@ -12,10 +12,14 @@ library(quanteda)
 library(readtext) # for getting document and their info into a data frame 
 library(tm)
 library(lubridate)
+
+# Set seed
+
+
 #Exploring the data 
 
 load("data/tweets_feminists.RData")
-````
+```
 
 # Initial exploration of the data of individual feminist accounts 
 
@@ -60,16 +64,17 @@ dim(fem_jul_nov_2020)
 
 # Removing the congressswomen to get more stable speech
 non_congress_fem_jul_nov_2020 <- fem_jul_nov_2020 %>% filter(main_occupation != "congressperson")
-save(non_congress_fem_jul_nov_2020, file = "data/pruebas/non_congress_fem_jul_nov_2020.RData")
+save(non_congress_fem_jul_nov_2020, file = "data/non_congress_fem_jul_nov_2020.RData")
 ```
+
+#Clean data and create sample for topic model of feminist accounts
 
 ```{r}
 
-names(feminists)
-#Subsetting dataset
+non_congress <- non_congress_fem_jul_nov_2020
 
-feminists <- 
-  feminists %>% 
+non_congress <- 
+  non_congress %>% 
   select(name, 
          screen_name, 
          text,
@@ -80,153 +85,45 @@ feminists <-
          institution)
 
 #Creating corpus
-feminists_corp <- corpus(feminists)
-```
-
-
-```{r}
-## Corpus structure
-
-#A corpus has two important components, the texts themselves, and information 
-#about them called 'docvars'. 
-
-#Explore docvars
-head(docvars(feminists_corp))
-
-#Explore text
-#txts <- texts(feminists_corp)
-
-#The information in summary is available in different functions
-
-#ndoc(feminists_corp) # document count
-#docnames(feminists_corp) # unique document identifiers
-#ntype(feminists_corp) # types in each document
-#ntoken(feminists_corp) # tokens in each document
-#nsentence(feminists_corp) # sentences in each document
-
-```
-```{r}
-#Subset on the basis of the docvars
-#sample_accounts <- c("1354646353")
-
-#Those word and sentence counts come from the `ntype`, (vocabulary size)
-#`ntoken` (word count), and `nsentence` (sentence count)
-#functions.
-
-#Getting tokens
-
-#toks <- tokens(feminists_corp)
-
-#Subsetting the tokens
-
-#toks [[10]]
-#toks [1:3]
-
-```
-
-```{r}
-#Removing stopwords (leaving gaps were they are)
-
-#toks2 <- tokens_remove(toks, stopwords(), padding = TRUE)
-
-#toks2[[1]][1:20] # first 20 tokens of document 1
-
-```
-
-```{r}
-#Keywords in context
-#kw_feminism <- kwic(feminists_corp, "feminismo", window = 10)
-#head(kw_feminism)
-#view(kw_feminism)
-
-#Paste pre + post
-
-#feminism_df <- tibble(speaker = kw_feminism$docname, 
-              #    text = paste(kw_feminism$pre, kw_feminism$post, sep = " "))
-
-#corp_feminism <- corpus(feminism_df)
-#summary(corp_feminism)
-
-```
-
-
-```{r}
-# Constructing a document feature matrix with Quanteda 
-corpdfm <- dfm(feminists_corp)
-
-dim(corpdfm)
-
-featnames(corpdfm)[1:1000]
-docnames(corpdfm)
+non_congress_corp <- corpus(non_congress)
 
 # Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
-corpdfm <- dfm(feminists_corp, 
+non_congress_dfm <- dfm(non_congress_corp, 
              tolower = TRUE, # convert all words to lower case 
-             stem = TRUE, # Esto lo hace en inglés. Busca la raíz de la palabra. Va a tocar hacerlo aparte... 
              remove = c(stopwords("spanish")),
              remove_punct = TRUE, # remove punctuation
              remove_url = TRUE, # remove u
              remove_numbers = TRUE,
              remove_symbols = TRUE,
              verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+            #it is better not to stem for topic models  
              
 # Remove mentions (@)
-corpdfm <- dfm_remove(corpdfm,
+non_congress_dfm <- dfm_remove(non_congress_dfm,
                       "@*",
                       verbose = T)
 
 #Remove hashtags         
-corpdfm <- dfm_remove(corpdfm,
+non_congress_dfm <- dfm_remove(non_congress_dfm,
                       "#*",
                       verbose = T)
 
 # Remove more stopwords (less than 4 characters)
-corpdfm <- dfm_keep(corpdfm,
+non_congress_dfm <- dfm_keep(non_congress_dfm,
                     min_nchar = 4,
                       verbose = T)
 
-sample_quanteda <- dfm_sample(x = corpdfm, size = 23000, margin = "documents")
+# Remove additional words that do not do meaningful work 
+load("data/additional_stopwords.RData")
 
-# Save the sample dfm to use in tests for topic modelling and scaling 
-save(sample_quanteda, file = "data/Sample_quanteda.RData")
+non_congress_dfm <- dfm_remove(non_congress_dfm,
+                    additional_stopowrds,
+                      verbose = T)
 
+#Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
+sample_non_congress_topicmodel <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "documents")
+
+save(sample_non_congress_topicmodel, file = "data/sample_non_congress_topicmodel.Rdata")
 ```
 
-```{r}
-##### Otros métodos para limpiar y procesar el dfm
-##### Otros métodos #####
-
-mycorpus <- Corpus(VectorSource(feminists$text))
-mycorpus <- tm_map(mycorpus, removeWords, stopwords("spanish"))
-
-# Remove URL
-remove_url <- function(x) gsub("http[^[:space:]]*","",x)
-mycorpus <- tm_map(mycorpus, content_transformer(remove_url))
-
-# Remove anything other than spanish letters and space
-remove_other <- function(x) gsub("[^[:alpha:][:space:]]*","", x) 
-mycorpus <- tm_map(mycorpus, content_transformer(remove_other))
-mycorpus <- tm_map(mycorpus, content_transformer(removePunctuation))
-mycorpus <- tm_map(mycorpus, content_transformer(tolower))
-mycorpus <- tm_map(mycorpus, stripWhitespace)
-mycorpus <- tm_map(mycorpus, stemDocument)
-
-mycorpus <- corpus(mycorpus)
-mycorpus_dfm <- dfm(mycorpus)
-
-#Create a sample to try analysis 
-sample_tm <- dfm_sample(x = mycorpus_dfm, size = 1000, margin = "documents")
-
-
-```
-
-```{r}
-# Comparing both dfm's (quanteda vs tm)
-dim(mycorpus_dfm)
-dim(corpdfm)
-
-featnames(mycorpus_dfm)[1:1000]
-featnames(corpdfm)[1:1000]
-
-```
 
