@@ -17,6 +17,7 @@ library(ggplot2)
 library(dplyr)
 library(wordcloud)
 library(stringr)
+library(stm)
 
 load("data/tweets_feminists.RData")
 names(feminists)
@@ -166,6 +167,7 @@ model_topics_non_congress <- stm(documents = out$documents,
 ```
 
 ```{r}
+
 stm_sample_non_congress <- asSTMCorpus(sample_non_congress)
 
 # Getting info from the corpus
@@ -210,6 +212,34 @@ model_top_terms %>%
   scale_y_reordered()
 
 ```
+
+
+```{r}
+#Per-document classification -Gamma
+
+#Each of these values is an estimated proportion of words from that document that are generated from that topic
+
+
+documents_gamma <- tidy(model_topics_non_congress, matrix = "gamma")
+
+documents_gamma_df <- as.data.frame(documents_gamma)
+
+doc_top1 <- documents_gamma_df %>% 
+  filter()
+
+```
+
+```{r}
+documents_gamma %>%
+  mutate(title = reorder(document, gamma * topic)) %>%
+  ggplot(aes(factor(topic), gamma)) +
+  geom_boxplot() +
+  facet_wrap(~ title)
+  
+
+
+```
+
 
 
 
