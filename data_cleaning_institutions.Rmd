@@ -1,0 +1,116 @@
+---
+title: "Institutional data cleaning and exploring"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(quanteda)
+library(readtext) # for getting document and their info into a data frame 
+library(tm)
+library(lubridate)
+library(ggplot2)
+#Exploring the data 
+
+load("data/tweets_institutions.RData")
+```
+
+# Initial exploration of the data 
+
+```{r}
+
+# Average tweets per account 
+institutions %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_tweets = mean(n))
+
+# Less recent tweet by account 
+institutions %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arrange(desc(min))
+
+# Frequency of tweets across time: too skewed due to some accounts tweeting too little
+ 
+institutions <- institutions %>% 
+  mutate(created_at = as_date(created_at),
+         day_published = ymd(created_at)) 
+
+institutions %>% 
+  group_by(day_published) %>% 
+  summarize(tweets_per_day = n()) %>% 
+    ggplot(aes(x = day_published,
+               y = tweets_per_day)) +
+    geom_line()+
+    theme_minimal()
+
+inst_jul_nov_2020 <- institutions %>% filter(day_published >= "2020-07-01")       
+
+# Frequency of tweets per day from July 2020 to November 2020: more balanced
+inst_jul_nov_2020 %>% 
+  group_by(day_published) %>% 
+  summarize(tweets_per_day = n()) %>% 
+    ggplot(aes(x = day_published,
+               y = tweets_per_day)) +
+    geom_line()+
+    theme_minimal()
+
+# Number of accounts left after trimming data : 39 
+unique(inst_jul_nov_2020$name.x) %>% length()
+
+# Number of tweets left after trimming: 25941 
+dim(inst_jul_nov_2020)
+```
+
+```{r}
+save(inst_jul_nov_2020, file = "data/inst_jul_nov_2020.RData")
+
+```
+
+```{r}
+names(institutions)
+#Subsetting dataset
+
+institutions <- 
+  institutions %>% 
+  select(name.x, 
+         screen_name, 
+         text,
+         user_id, 
+         created_at, 
+         retweet_count)
+
+#Creating corpus
+institutions_corp <- corpus(institutions)
+```
+
+```{r}
+# Constructing a document feature matrix with Quanteda 
+# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
+corpdfm_i <- dfm(institutions_corp, 
+             tolower = TRUE, # convert all words to lower case 
+             stem = TRUE, # Esto lo hace en inglés. Busca la raíz de la palabra. Va a tocar hacerlo aparte... 
+             remove = c(stopwords("spanish")),
+             remove_punct = TRUE, # remove punctuation
+             remove_url = TRUE, # remove u
+             remove_numbers = TRUE,
+             remove_symbols = TRUE,
+             verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+             
+# Remove mentions (@)
+corpdfm_i <- dfm_remove(corpdfm_i,
+                      "@*",
+                      verbose = T)
+
+#Remove hashtags         
+corpdfm_i <- dfm_remove(corpdfm_i,
+                      "#*",
+                      verbose = T)
+
+# Remove more stopwords (less than 4 characters)
+corpdfm_i <- dfm_keep(corpdfm_i,
+                    min_nchar = 4,
+                      verbose = T)
+
+sample_institutions_topicmodel <- dfm_sample(x = corpdfm_i, size = 7000, margin = "documents")
+
+# Save the sample dfm to use for topic modelling and scaling 
+save(sample_institutions_topicmodel, file = "data/sample_institutions_topicmodel.RData")
+
+```
