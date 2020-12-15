@@ -13,60 +13,7 @@ library(ggthemes)
 # Get data and clean it. Create dfm. 
 ```{r}
 
-# Load data with tweets from institutional twitter accounts between july and november 2020. 
-
-load("data/pruebas/inst_jul_nov_2020.RData")
-
-institutions <- inst_jul_nov_2020
-
-institutions <- 
-  institutions %>% 
-  select(name.x, 
-         screen_name, 
-         text,
-         user_id, 
-         created_at, 
-         retweet_count)
-
-
-#Creating corpus
-institutions_corp <- corpus(institutions)
-
-# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
-institutions_dfm <- dfm(institutions_corp, 
-             tolower = TRUE, # convert all words to lower case 
-             remove = c(stopwords("spanish")),
-             remove_punct = TRUE, # remove punctuation
-             remove_url = TRUE, # remove u
-             remove_numbers = TRUE,
-             remove_symbols = TRUE,
-             verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
-            #it is better not to stem for topic models  
-             
-# Remove mentions (@)
-institutions_dfm <- dfm_remove(institutions_dfm,
-                      "@*",
-                      verbose = T)
-
-#Remove hashtags         
-institutions_dfm <- dfm_remove(institutions_dfm,
-                      "#*",
-                      verbose = T)
-
-# Remove more stopwords (less than 4 characters)
-institutions_dfm <- dfm_keep(institutions_dfm,
-                    min_nchar = 4,
-                      verbose = T)
-
-# Remove additional words that do not do meaningful work 
-load("additional_stopwords.RData")
-
-institutions_dfm <- dfm_remove(institutions_dfm,
-                    additional_stopowrds,
-                      verbose = T)
-
-#Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
-sample_institutions <- dfm_sample(x = institutions_dfm, size = 7000, margin = "documents")
+sample_institutions <- load("data/sample_institutions_topicmodel.RData")
 ```
 
 #Running the structural topic model
@@ -85,8 +32,6 @@ out_i <- prepDocuments(stm_sample_institutions$documents,
 model_topics_institutions <- stm(documents = out_i$documents, 
               vocab = out_i$vocab, 
               K = 10, seed = 12345)
-
-
 
 ```
 
@@ -118,7 +63,7 @@ plot(model_topics_institutions, type = "labels", labeltype = "prob", topics = 10
 td_beta <- tidy(model_topics_institutions)
 
 td_gamma <- tidy(model_topics_institutions, matrix = "gamma",
-                 document_names = rownames(institutions_dfm))
+                 document_names = rownames(sample_institutions_topicmodel))
 
 top_terms <- td_beta %>%
   arrange(beta) %>%
@@ -138,7 +83,7 @@ gamma_terms <- td_gamma %>%
   mutate(topic = paste0("Topic ", topic),
          topic = reorder(topic, gamma))
 
-topics_inst_plot <- gamma_terms %>%
+gamma_terms %>%
   top_n(20, gamma) %>%
   ggplot(aes(topic, gamma, label = terms, fill = topic)) +
   geom_col(show.legend = FALSE) +
@@ -156,6 +101,6 @@ topics_inst_plot <- gamma_terms %>%
 
 ```{r}
 
-ggsave("figures/topics_inst_plot.jpg")
+ggsave("figures/topics_inst_plot.png")
 
 ```
