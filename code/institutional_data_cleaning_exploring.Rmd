@@ -1,0 +1,190 @@
+---
+title: "Institutional data cleaning and exploring"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(quanteda)
+library(readtext) # for getting document and their info into a data frame 
+library(tm)
+library(lubridate)
+library(ggplot2)
+#Exploring the data 
+
+load("data/tweets_institutions.RData")
+```
+
+# Initial exploration of the data 
+
+```{r}
+
+# Average tweets per account 
+institutions %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_tweets = mean(n))
+
+# Less recent tweet by account 
+institutions %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arrange(desc(min))
+
+# Frequency of tweets across time: too skewed due to some accounts tweeting too little
+ 
+institutions <- institutions %>% 
+  mutate(created_at = as_date(created_at),
+         day_published = ymd(created_at)) 
+
+institutions %>% 
+  group_by(day_published) %>% 
+  summarize(tweets_per_day = n()) %>% 
+    ggplot(aes(x = day_published,
+               y = tweets_per_day)) +
+    geom_line()+
+    theme_minimal()
+
+inst_jul_nov_2020 <- institutions %>% filter(day_published >= "2020-07-01")       
+
+# Frequency of tweets per day from July 2020 to November 2020: more balanced
+inst_jul_nov_2020 %>% 
+  group_by(day_published) %>% 
+  summarize(tweets_per_day = n()) %>% 
+    ggplot(aes(x = day_published,
+               y = tweets_per_day)) +
+    geom_line()+
+    theme_minimal()
+
+# Number of accounts left after trimming data : 39 
+unique(inst_jul_nov_2020$name.x) %>% length()
+
+# Number of tweets left after trimming: 25941 
+dim(inst_jul_nov_2020)
+```
+
+```{r}
+save(inst_jul_nov_2020, file = "data/pruebas/inst_jul_nov_2020.RData")
+
+```
+
+```{r}
+names(institutions)
+#Subsetting dataset
+
+institutions <- 
+  institutions %>% 
+  select(name.x, 
+         screen_name, 
+         text,
+         user_id, 
+         created_at, 
+         retweet_count)
+
+#Creating corpus
+institutions_corp <- corpus(institutions)
+```
+
+
+```{r}
+## Corpus structure
+
+#A corpus has two important components, the texts themselves, and information 
+#about them called 'docvars'. 
+
+#Explore docvars
+head(docvars(institutions_corp))
+
+#Explore text
+#txts <- texts(institutions_corp)
+
+#The information in summary is available in different functions
+
+#ndoc(institutions_corp) # document count
+#docnames(institutions_corp) # unique document identifiers
+#ntype(institutions_corp) # types in each document
+#ntoken(institutions_corp) # tokens in each document
+#nsentence(institutions_corp) # sentences in each document
+
+```
+```{r}
+#Subset on the basis of the docvars
+#sample_i_accounts <- c("1354646353")
+
+#Those word and sentence counts come from the `ntype`, (vocabulary size)
+#`ntoken` (word count), and `nsentence` (sentence count)
+#functions.
+
+#Getting tokens
+
+i_toks <- tokens(institutions_corp)
+
+#Subsetting the tokens
+
+i_toks [[10]]
+i_toks [1:3]
+
+```
+
+```{r}
+#Removing stopwords (leaving gaps were they are)
+
+i_toks2 <- tokens_remove(i_toks, stopwords(), padding = TRUE)
+
+i_toks2[[1]][1:20] # first 20 tokens of document 1
+
+```
+
+```{r}
+#Keywords in context
+kw_institutions <- kwic(institutions_corp, "instituciones", window = 10)
+head(kw_institutions)
+view(kw_institutions)
+
+#Paste pre + post
+
+institutions_df <- tibble(speaker = kw_institutions$docname, 
+                  text = paste(kw_institutions$pre, kw_institutions$post, sep = " "))
+
+corp_institutions <- corpus(institutions_df)
+summary(corp_institutions)
+
+```
+
+
+```{r}
+# Constructing a document feature matrix with Quanteda 
+corpdfm_i <- dfm(institutions_corp)
+
+dim(corpdfm_i)
+
+featnames(corpdfm_i)[1:1000]
+docnames(corpdfm_i)
+
+# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
+corpdfm_i <- dfm(institutions_corp, 
+             tolower = TRUE, # convert all words to lower case 
+             stem = TRUE, # Esto lo hace en inglés. Busca la raíz de la palabra. Va a tocar hacerlo aparte... 
+             remove = c(stopwords("spanish")),
+             remove_punct = TRUE, # remove punctuation
+             remove_url = TRUE, # remove u
+             remove_numbers = TRUE,
+             remove_symbols = TRUE,
+             verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+             
+# Remove mentions (@)
+corpdfm_i <- dfm_remove(corpdfm_i,
+                      "@*",
+                      verbose = T)
+
+#Remove hashtags         
+corpdfm_i <- dfm_remove(corpdfm_i,
+                      "#*",
+                      verbose = T)
+
+# Remove more stopwords (less than 4 characters)
+corpdfm_i <- dfm_keep(corpdfm_i,
+                    min_nchar = 4,
+                      verbose = T)
+
+sample_quanteda_institutions <- dfm_sample(x = corpdfm_i, size = 23000, margin = "documents")
+
+# Save the sample dfm to use in tests for topic modelling and scaling 
+save(sample_quanteda_institutions, file = "data/Sample_quanteda_institutions.RData")
+
+```
