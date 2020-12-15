@@ -5,7 +5,13 @@ date: "11/30/2020"
 output: html_document
 ---
 
+# Trying to run topic model in full dfm 
+
 ```{r}
+
+library(stm)
+
+load("pruebas/full_feminists_dfm.RData")
 
 
 #Make the quanteda dfm a stm corpus for running the model
