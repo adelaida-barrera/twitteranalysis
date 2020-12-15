@@ -13,67 +13,12 @@ library(tidytext)
 library(ggthemes)
 ```
 
-# Get data and clean it. Create dfm. 
+# Load data from sample taken in cleaning code
+
 ```{r}
 
-# Load data with tweets from individual (not congresswomen) feminists' twitter accounts between july and november 2020. 
+load("data/sample_non_congress_topicmodel.Rdata")
 
-load("data/non_congress_fem_jul_nov_2020.RData")
-
-non_congress <- non_congress_fem_jul_nov_2020
-
-non_congress <- 
-  non_congress %>% 
-  select(name, 
-         screen_name, 
-         text,
-         user_id, 
-         created_at, 
-         retweet_count,
-         main_occupation,
-         institution)
-
-# Remove accounts that do not talk about gender much
-non_congress <- filter(name != c("Rordigo Sandoval", "Sara Tufano", "Juan Carlos Rincón Escalante"))
-
-#Creating corpus
-non_congress_corp <- corpus(non_congress)
-
-# Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
-non_congress_dfm <- dfm(non_congress_corp, 
-             tolower = TRUE, # convert all words to lower case 
-             remove = c(stopwords("spanish")),
-             remove_punct = TRUE, # remove punctuation
-             remove_url = TRUE, # remove u
-             remove_numbers = TRUE,
-             remove_symbols = TRUE,
-             verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
-            #it is better not to stem for topic models  
-             
-# Remove mentions (@)
-non_congress_dfm <- dfm_remove(non_congress_dfm,
-                      "@*",
-                      verbose = T)
-
-#Remove hashtags         
-non_congress_dfm <- dfm_remove(non_congress_dfm,
-                      "#*",
-                      verbose = T)
-
-# Remove more stopwords (less than 4 characters)
-non_congress_dfm <- dfm_keep(non_congress_dfm,
-                    min_nchar = 4,
-                      verbose = T)
-
-# Remove additional words that do not do meaningful work 
-load("additional_stopwords.RData")
-
-non_congress_dfm <- dfm_remove(non_congress_dfm,
-                    additional_stopowrds,
-                      verbose = T)
-
-#Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
-sample_non_congress <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "documents")
 ```
 
 #Running the structural topic model
@@ -81,7 +26,7 @@ sample_non_congress <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "d
 ```{r}
 
 #Make the quanteda dfm a stm corpus for running the model
-stm_sample_non_congress <- asSTMCorpus(sample_non_congress)
+stm_sample_non_congress <- asSTMCorpus(sample_non_congress_topicmodel)
 
 # Getting info from the corpus
 out <- prepDocuments(stm_sample_non_congress$documents, 
@@ -94,7 +39,7 @@ model_topics_non_congress <- stm(documents = out$documents,
               K = 10, seed = 12345)
 
 # Save the output for future plotting or analysis 
-save(model_topics_non_congress, file = "data/pruebas/model_topics_non_congress")
+save(model_topics_non_congress, file = "model_topics_feminists")
 
 ```
 
@@ -151,7 +96,9 @@ topics_ind_plot <- gamma_terms %>%
        title = "Topics by prevalence in the Colombian feminist twitter discourse",
        subtitle = "Top words that contribute to each topic")
 
-ggsave("figures/topics_ind_plot.jpg")
+topics_ind_plot
+
+ggsave("figures/topics_ind_plot.png")
 ```
 
 ```{r}
