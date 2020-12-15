@@ -17,7 +17,7 @@ library(lubridate)
 load("data/tweets_feminists.RData")
 ````
 
-# Initial exploration of the data 
+# Initial exploration of the data of individual feminist accounts 
 
 ```{r}
 
@@ -227,7 +227,6 @@ dim(corpdfm)
 
 featnames(mycorpus_dfm)[1:1000]
 featnames(corpdfm)[1:1000]
-
 
 ```
 
