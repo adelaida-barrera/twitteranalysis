@@ -1,0 +1,11 @@
+---
+title: "Bi-grams"
+output: html_document
+---
+
+```{r}
+bigrams <- non_congress_dfm %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
+
+unnest_to
+`````
