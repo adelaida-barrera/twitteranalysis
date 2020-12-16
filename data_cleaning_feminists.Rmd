@@ -15,10 +15,16 @@ library(lubridate)
 
 # Set seed
 
+```
 
-#Exploring the data 
-
+```{r}
 load("data/tweets_feminists.RData")
+
+
+feminists <- feminists %>% 
+  mutate(created_at = as_date(created_at),
+         day_published = ymd(created_at)) 
+
 ```
 
 # Initial exploration of the data of individual feminist accounts 
@@ -33,10 +39,6 @@ feminists %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arr
 
 # Frequency of tweets across time: too skewed due to some accounts tweeting too little
  
-feminists <- feminists %>% 
-  mutate(created_at = as_date(created_at),
-         day_published = ymd(created_at)) 
-
 feminists %>% 
   group_by(day_published) %>% 
   summarize(tweets_per_day = n()) %>% 
@@ -44,6 +46,8 @@ feminists %>%
                y = tweets_per_day)) +
     geom_line()+
     theme_minimal()
+
+# Trim dataframe to leave only last 6 months
 
 fem_jul_nov_2020 <- feminists %>% filter(day_published >= "2020-07-01")       
 
@@ -62,16 +66,26 @@ unique(fem_jul_nov_2020$name) %>% length()
 # Number of tweets left after trimming: 116402 
 dim(fem_jul_nov_2020)
 
+```
+
+# Trimming dataframe 
+```{r}
+
 # Removing the congressswomen to get more stable speech
-non_congress_fem_jul_nov_2020 <- fem_jul_nov_2020 %>% filter(main_occupation != "congressperson")
-save(non_congress_fem_jul_nov_2020, file = "data/non_congress_fem_jul_nov_2020.RData")
+non_congress <- fem_jul_nov_2020 %>%
+  filter(main_occupation != "congressperson") 
+
+non_congress <- non_congress %>% 
+  mutate(id = rownames(non_congress),
+         text_id = paste(screen_name, id,
+                         sep = "_"))
+
+save(non_congress, file = "data/non_congress_fem_jul_nov_2020.RData")
 ```
 
 #Clean data and create sample for topic model of feminist accounts
 
 ```{r}
-
-non_congress <- non_congress_fem_jul_nov_2020
 
 non_congress <- 
   non_congress %>% 
@@ -79,24 +93,25 @@ non_congress <-
          screen_name, 
          text,
          user_id, 
+         text_id,
          created_at, 
          retweet_count,
          main_occupation,
          institution)
 
 #Creating corpus
-non_congress_corp <- corpus(non_congress)
+non_congress_corp <- corpus(x = non_congress)
 
 # Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
-non_congress_dfm <- dfm(non_congress_corp, 
-             tolower = TRUE, # convert all words to lower case 
-             remove = c(stopwords("spanish")),
-             remove_punct = TRUE, # remove punctuation
-             remove_url = TRUE, # remove u
-             remove_numbers = TRUE,
-             remove_symbols = TRUE,
-             verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
-            #it is better not to stem for topic models  
+non_congress_dfm <- dfm(x = non_congress_corp, 
+                        tolower = TRUE, # convert all words to lower case 
+                        remove = c(stopwords("spanish")),
+                        remove_punct = TRUE, # remove punctuation
+                        remove_url = TRUE, # remove u
+                        remove_numbers = TRUE,
+                        remove_symbols = TRUE,
+                        verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+                #it is better not to stem for topic models  
              
 # Remove mentions (@)
 non_congress_dfm <- dfm_remove(non_congress_dfm,
@@ -119,6 +134,18 @@ load("data/additional_stopwords.RData")
 non_congress_dfm <- dfm_remove(non_congress_dfm,
                     additional_stopowrds,
                       verbose = T)
+
+
+docnames(non_congress_dfm) <- non_congress$text_id
+
+non_congress_dfm_full <- non_congress_dfm
+
+save(non_congress_dfm_full, file = "data/non_congress_dfm_full")
+
+```
+
+
+```{r}
 
 #Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
 sample_non_congress_topicmodel <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "documents")
