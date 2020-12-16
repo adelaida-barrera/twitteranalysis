@@ -28,7 +28,7 @@ model_topics_non_congress <- stm(documents = out$documents,
               K = 10, seed = 12345)
 
 # Save the output for future plotting or analysis 
-
+save(model_topics_non_congress, file = "model_topics_full")
 ```
 
 #See what came out 
