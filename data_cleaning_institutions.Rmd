@@ -108,6 +108,20 @@ corpdfm_i <- dfm_keep(corpdfm_i,
                     min_nchar = 4,
                       verbose = T)
 
+# Remove additional words that do not do meaningful work 
+load("data/additional_stopwords.RData")
+
+corpdfm_i <- dfm_remove(corpdfm_i,
+                    additional_stopowrds,
+                      verbose = T)
+
+
+docnames(corpdfm_i) <- institutions$text_id
+
+institutions_dfm_full <- corpdfm_i
+
+save(institutions_dfm_full, file = "data/full_institutions_dfm.Rdata")
+
 sample_institutions_topicmodel <- dfm_sample(x = corpdfm_i, size = 7000, margin = "documents")
 
 # Save the sample dfm to use for topic modelling and scaling 

@@ -1,0 +1,54 @@
+---
+title: "Bi-grams"
+output: html_document
+---
+Creating bi-grams
+```{r}
+fem_bigrams <- non_congress %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
+
+fem_bigrams
+```
+
+Exploring
+```{r}
+fem_bigrams %>%
+  count(bigram, sort = TRUE)
+```
+
+Cleaning
+```{r}
+bigrams_separated <- fem_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+  
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% c(stopwords("spanish"))) %>%
+  filter(!word2 %in% c(stopwords("spanish"))) %>% 
+  filter(!word1 %in% c("https")) %>% 
+  filter(!word2 %in% c("https")) %>% 
+# Aquí falta limpiar un poco más, quizá
+
+# new bigram counts:
+fem_bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+
+fem_bigram_counts
+```
+Volverlos bi-grams otra vez, después de limpiar
+```{r}
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+
+bigrams_united
+```
+```{r}
+bigram_occupation <- bigrams_united %>%
+  count(main_occupation, bigram) %>%
+  bind_tf_idf(bigram, main_occupation, n) %>%
+  arrange(desc(n))
+
+bigram_occupation
+```
+
+
+

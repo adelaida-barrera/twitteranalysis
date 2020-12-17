@@ -1,0 +1,70 @@
+---
+title: "Key words in context"
+output: html_document
+---
+
+Key words in context para las cuentas individuales
+```{r}
+kw_mujer <- kwic(non_congress_corp, "mujer*", window = 5)
+head(kw_mujer)
+
+kw_trans <- kwic(non_congress_corp, "trans*", window = 5)
+head(kw_trans)
+
+kw_violencia <- kwic(non_congress_corp, "violencia*", window = 5)
+head(kw_violencia)
+# Aquí salen muchas de 'violencia sexual', que puede ser un poco obvio, pero habla del tipo de violencia
+# que sufren las mujeres.
+
+kw_terf <- kwic(non_congress_corp, "terf*", window = 5)
+head(kw_terf)
+# Éste no está entre los topics que salieron, pero creo que vale la pena correrlo para pensar en la discusión terf/trans...
+
+kw_feminismo <- kwic(non_congress_corp, "feminismo*", window = 5)
+head(kw_feminismo)
+
+kw_polarización <- kwic(non_congress_corp, "polarización*", window = 5)
+head(kw_polarización)
+
+kw_hombre <- kwic(non_congress_corp, "hombre*", window = 5)
+head(kw_hombre)
+
+kw_sexual <- kwic(non_congress_corp, "sexual*", window = 5)
+head(kw_sexual)
+# Aquí la mayoría están relacionadas con violencia, mientras en las cuentas institucionales se habla más bien de derechos.
+
+kw_ <- kwic(non_congress_corp, "*", window = 5)
+head(kw_)
+```
+
+
+Y para las institucionales
+```{r}
+kw_mujer <- kwic(institutions_corp, "mujer*", window = 5)
+head(kw_mujer)
+
+kw_violencia <- kwic(institutions_corp, "violencia*", window = 5)
+head(kw_violencia)
+
+kw_sexual <- kwic(institutions_corp, "sexual*", window = 5)
+head(kw_sexual)
+# Aquí salen muchas veces 'derechos sexuales y reproductivos', mientras en las individuales se habla de violencia sexual.
+
+kw_víctima <- kwic(institutions_corp, "víctima*", window = 5)
+head(kw_víctima)
+
+kw_conflicto <- kwic(institutions_corp, "conflicto*", window = 5)
+head(kw_conflicto)
+
+kw_aborto <- kwic(institutions_corp, "aborto*", window = 5)
+head(kw_aborto)
+# Éste no sale en los topics de las cuentas individuales, pero sí en las institucionales. 
+# Sale mucho como parte de la consigna 'legal, seguro y gratuito'.
+
+kw_feminismo <- kwic(institutions_corp, "feminismo*", window = 5)
+head(kw_feminismo)
+# Aquí parece haber menos enciones 'cuestionadoras' del feminismo.
+
+kw_ <- kwic(institutions_corp, "*", window = 5)
+head(kw_)
+```
