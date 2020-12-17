@@ -135,7 +135,7 @@ non_congress_dfm <- dfm_remove(non_congress_dfm,
                     additional_stopowrds,
                       verbose = T)
 
-
+# Important! Change rownames of dfm matrix to the id of each document that includes name of author
 docnames(non_congress_dfm) <- non_congress$text_id
 
 non_congress_dfm_full <- non_congress_dfm
@@ -147,10 +147,12 @@ save(non_congress_dfm_full, file = "data/non_congress_dfm_full")
 
 ```{r}
 
-#Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
-sample_non_congress_topicmodel <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "documents")
+# For testing the model, create a subset to avoid long processing times 
 
-save(sample_non_congress_topicmodel, file = "data/sample_non_congress_topicmodel.Rdata")
+#Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
+#sample_non_congress_topicmodel <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "documents")
+
+#save(sample_non_congress_topicmodel, file = "data/sample_non_congress_topicmodel.Rdata")
 ```
 
 
