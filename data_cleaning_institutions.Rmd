@@ -40,7 +40,8 @@ institutions %>%
     geom_line()+
     theme_minimal()
 
-inst_jul_nov_2020 <- institutions %>% filter(day_published >= "2020-07-01")       
+inst_jul_nov_2020 <- institutions %>% filter(day_published >= "2020-07-01")    
+
 
 # Frequency of tweets per day from July 2020 to November 2020: more balanced
 inst_jul_nov_2020 %>% 
@@ -59,30 +60,36 @@ dim(inst_jul_nov_2020)
 ```
 
 ```{r}
+
+inst_jul_nov_2020 <- inst_jul_nov_2020 %>% 
+  mutate(id = rownames(inst_jul_nov_2020),
+         text_id = paste(screen_name, id,
+                         sep = "_"))
+
 save(inst_jul_nov_2020, file = "data/inst_jul_nov_2020.RData")
 
 ```
 
 ```{r}
-names(institutions)
-#Subsetting dataset
 
-institutions <- 
-  institutions %>% 
+inst_jul_nov_2020 <- 
+  inst_jul_nov_2020 %>% 
   select(name.x, 
          screen_name, 
          text,
          user_id, 
          created_at, 
-         retweet_count)
+         retweet_count,
+         text_id)
 
 #Creating corpus
-institutions_corp <- corpus(institutions)
+institutions_corp <- corpus(inst_jul_nov_2020)
 ```
 
 ```{r}
 # Constructing a document feature matrix with Quanteda 
 # Removing unnecessary words; stem the text, extract n-grams, remove punctuation, keep Twitter features…
+
 corpdfm_i <- dfm(institutions_corp, 
              tolower = TRUE, # convert all words to lower case 
              stem = TRUE, # Esto lo hace en inglés. Busca la raíz de la palabra. Va a tocar hacerlo aparte... 
@@ -115,8 +122,7 @@ corpdfm_i <- dfm_remove(corpdfm_i,
                     additional_stopowrds,
                       verbose = T)
 
-
-docnames(corpdfm_i) <- institutions$text_id
+docnames(corpdfm_i) <- inst_jul_nov_2020$text_id
 
 institutions_dfm_full <- corpdfm_i
 

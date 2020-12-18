@@ -17,7 +17,10 @@ library(lubridate)
 
 ```{r}
 
+
 # Loading the model and dfm 
+
+# Individual 
 
 #DFM used for topic model 
 load("data/non_congress_dfm_full")
@@ -28,11 +31,24 @@ load("model_topics_full")
 #Dataframe with tweets and metadata (object name is "non_congres")
 load("data/non_congress_fem_jul_nov_2020.RData")
 
+# Institutional 
+
+# DFM used for topic model 
+load("data/full_institutions_dfm.Rdata")
+
+# Topic Model 
+load("model_topics_inst_full")
+
+#Dataframe with tweets and metadata (object name is "inst_jul_nov_2020")
+load("data/inst_jul_nov_2020.RData")
+
 ```
 
 The LDA model calculates the probability of each word being generated from each topic (betas) and the 'per-document-per-topic probabilities': the proportion of words from that document that are generated from each topic. 
 
-We can broadly identify what the 10 topics are, although the model does not perfectly classify the documents according to our posterior interpretation.  
+We can broadly identify what the 10 topics are for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. 
+
+Topics in individual accounts:
 
 * Topic 1: Media & equality 
 * Topic 2: Public opinion
@@ -44,6 +60,8 @@ We can broadly identify what the 10 topics are, although the model does not perf
 * Topic 8: Political violence 
 * Topic 9: Everyday life & feminism
 * Topic 10: Judicial  
+
+Topics in institutional accounts: 
 
 # Most common words in each topic 
 
@@ -61,13 +79,13 @@ colors <- c("#E63D3D",#red
             "#631257", #burgundy
             "#717174") #grey
            
-          
-
+# Topic lables for individual accounts 
 topic_labels <- c("Media & equality", "Public opinion", "State violence", "Women's rights", "Gender violence", "National politics", "Journalism", "Political violence", "Everyday life", "Judicial")
-
 ```
 
 ```{r}
+
+# Individual 
 
 model_betas <- tidy(model_topics_non_congress, matrix = "beta")
 
@@ -89,7 +107,7 @@ model_top_terms %>%
   facet_wrap(~ topic, scales = "free") +
   labs(x = "\n Word probabilities per topic (betas)",
        y = "Term \n", 
-       title = "Ten most common terms within each topic") +
+       title = "Ten most common terms within each topic (individual accounts") +
   scale_y_reordered() +
   scale_x_continuous(n.breaks = 2) +
   scale_fill_manual(values = colors) +
@@ -99,8 +117,60 @@ model_top_terms %>%
 
 ```
 
+```{r}
+
+# Topic lables for institucional accounts 
+
+topic_labels_i <- c("Service provision",
+                    "Peace agreement",
+                    "Women",
+                    "National issues",
+                    "Gender violence",
+                    "Human Rights",
+                    "LGBT /social leaders", 
+                    "Reproductive health",
+                    "Institutional events", 
+                    "Public life")
+                   
+
+# Institutional 
+
+model_betas <- tidy(model_topics_institutions_full, matrix = "beta")
+
+model_top_terms <- model_betas %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta) %>% 
+  mutate(topic = factor(topic, 
+                        levels = 1:10, 
+                        labels = topic_labels_i))
+
+#Identify the words that are most common within topics
+
+model_top_terms %>% 
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  labs(x = "\n Word probabilities per topic (betas)",
+       y = "Term \n", 
+       title = "Ten most common terms within each topic (institutional accounts)") +
+  scale_y_reordered() +
+  scale_x_continuous(n.breaks = 2) +
+  scale_fill_manual(values = colors) +
+  theme_minimal() +
+  theme(text = element_text(size = 9))
+  
+
+```
+
+
+
 # Proportion of topics in corpus 
 
+
+## Individual accounts 
 ```{r}
 
 #Gather the betas and gammas from the topic model into dataframes in order to work with the tidyverse framework 
@@ -156,14 +226,65 @@ topics_ind_plot
 # ggsave("figures/topics_ind_plot.png")
 ```
 
+## Institutional accounts 
 
 ```{r}
 
+
+#Gather the betas and gammas from the topic model into dataframes in order to work with the tidyverse framework 
+
+td_beta_ins <- tidy(model_topics_institutions_full)
+
+td_gamma_ins <- tidy(model_topics_institutions_full, matrix = "gamma",
+                 document_names = rownames(institutions_dfm_full))
+
+# Get the top 12 most likely words to be generated when talking about each topic.
+
+top_terms_ins <- td_beta_ins %>%
+  arrange(beta) %>%
+  group_by(topic) %>%
+  top_n(12, beta) %>%
+  arrange(-beta) %>%
+  select(topic, term) %>%
+  summarise(terms = list(term)) %>%
+  mutate(terms = map(terms, paste, collapse = ", ")) %>% 
+  unnest()
+
+# Get the mean proportion of each topic across all documents in descending order
+gamma_terms_ins <- td_gamma_ins %>%
+  group_by(topic) %>%
+  summarise(gamma = mean(gamma)) %>%
+  arrange(desc(gamma)) %>%
+  left_join(top_terms_ins, by = "topic") %>%
+  arrange(topic) %>% 
+  mutate(topic = topic_labels_i,
+         topic = reorder(topic, gamma))
+
+topics_ins_plot <- gamma_terms_ins %>%
+  top_n(20, gamma) %>%
+  ggplot(aes(topic, gamma, 
+             label = terms, 
+             fill = topic)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(hjust = 0.2, nudge_y = 0.0005, size = 2.5) +
+  coord_flip() +
+  theme_minimal() +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 0.3)) +
+  scale_fill_manual(values = c(colors)) +
+  labs(x = NULL, y = expression(gamma),
+       title = "Topics by prevalence in the Colombian feminist twitter discourse",
+       subtitle = "Top words that contribute to each topic")
+
+topics_ins_plot
+
+
+
 ```
 
-## Plotting topic proportions across time 
+# Topic proportions across time 
 
-### Preparing the data 
+### Individual 
 ```{r}
 
 tweets_meta <- non_congress %>% 
@@ -251,6 +372,96 @@ weekly_topics %>%
 
 ```
 
+### Institutional 
+```{r}
+
+tweets_meta_ins <- non_congress %>% 
+  select(id, 
+         text_id, 
+         screen_name,
+         text,
+         favorite_count,
+         retweet_count,
+         day_published,
+         name, 
+         main_occupation,
+         institution) %>% 
+  rename(document = text_id) %>% 
+  mutate(week_published = week(day_published))
+
+gammas <- tidy(model_topics_non_congress, matrix = "gamma",
+                 document_names = rownames(non_congress_dfm_full))
+
+
+#Geting only the most predominant topic per document 
+
+main_gammas <- gammas %>% 
+  group_by(document) %>%
+  filter(gamma == max(gamma)) %>%
+  ungroup() %>%
+  arrange(document)
+
+# Joining tidy model main topics with tweetr dataframe
+
+non_congress_wgammas <- left_join(main_gammas, tweets_meta, by = "document")
+
+```
+
+
+
+```{r}
+
+# Plotting
+
+weekly_topics <- 
+  non_congress_wgammas %>% 
+  group_by(week_published, topic) %>% 
+  summarize(n_docs_per_topic_in_week = n())
+
+docs_per_week <- non_congress_wgammas %>% group_by(week_published) %>% summarise(n_doc_week = n())
+
+weekly_topics <-
+  inner_join(weekly_topics, docs_per_week) %>% 
+  mutate(proportion_topic_week = n_docs_per_topic_in_week / n_doc_week,
+         topic = topic_labels,
+         date = as_date(duration(week_published,units = "weeks"),
+                        origin = "2020-01-01"))
+  
+# Plotting all topics at once 
+weekly_topics %>%  
+  ggplot(aes(x = date,
+           y = proportion_topic_week,
+           color = factor(topic))) +
+  geom_line(alpha = 0.5, size = 0.6) + 
+  geom_point() + 
+  theme_minimal()+
+  labs(title = "Proportion of documents from each topic by week (2020)",
+       x = "\n Week published",
+       y = "Proportion of documents \n") +
+   scale_color_manual(values = c(colors),
+                     name = "Topic")
+
+
+
+# Closer look at the dynamic between women's rights discourse and national politics  
+
+weekly_topics %>%
+  filter(topic %in% c("Women's rights",
+                      "National politics")) %>%  
+  ggplot(aes(x = date,
+             y = proportion_topic_week,
+             color = factor(topic))) +
+  geom_line(alpha = 0.5, size = 0.6) + 
+  geom_point() + 
+  theme_minimal()+
+  labs(title = "Proportion of documents from each topic by week (2020)",
+        x = "\n Week published",
+        y = "Proportion of documents \n") +
+  scale_color_manual(values = c(colors),
+                     name = "Topic")
+
+```
+
 # Plotting topics by ocuppation 
 
 ```{r}
@@ -276,5 +487,16 @@ ggplot(plot_topic_occupations,
   theme(legend.title = element_blank(),
         legend.text = element_text(size = 10)) +
   guides(fill = guide_legend(keywidth = 0.7, keyheight = 0.7))
+
+```
+# Gathering a subset of the tweets that mainly talk about political matters.
+
+```{r}
+
+tweets_on_politics <- non_congress_wgammas %>% 
+  group_by(topic) %>% 
+  filter(gamma > 0.6,
+         topic %in% c(3,6,8))
+save(tweets_on_politics, file = "data/ind_tweets_on_politics")
 
 ```
