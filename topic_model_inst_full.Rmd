@@ -26,7 +26,7 @@ model_topics_institutions_full <- stm(documents = out$documents,
               K = 10, seed = 12345)
 
 # Save the output for future plotting or analysis 
-save(model_topics_institutions_full, file = "model_topics_inst_full")
+save(model_topics_institutions_full, file = "model_topics_inst_full_2")
 ```
 
 #See what came out 
