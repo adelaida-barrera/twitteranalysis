@@ -15,8 +15,6 @@ library(knitr)
 library(lubridate)
 ```
 
-
-
 ```{r}
 
 # Loading the model and dfm 
@@ -278,12 +276,5 @@ ggplot(plot_topic_occupations,
   theme(legend.title = element_blank(),
         legend.text = element_text(size = 10)) +
   guides(fill = guide_legend(keywidth = 0.7, keyheight = 0.7))
-
-```
-
-# Main accounts that about each topic 
-```{r}
-
-
 
 ```
