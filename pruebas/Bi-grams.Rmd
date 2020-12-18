@@ -26,7 +26,11 @@ bigrams_filtered <- bigrams_separated %>%
   filter(!word2 %in% c(stopwords("spanish"))) %>% 
   filter(!word1 %in% c("https")) %>% 
   filter(!word2 %in% c("https")) %>% 
+  filter(! is.na(word1)) %>% 
+  filter(! is.na(word2)) 
 # Aquí falta limpiar un poco más, quizá
+# Quité también missings
+# Los dos ultimos se pueden hacer el mismo comando
 
 # new bigram counts:
 fem_bigram_counts <- bigrams_filtered %>% 

@@ -1,0 +1,243 @@
+---
+title: "Networkanalysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% c(stopwords("spanish")),
+         !word2 %in% c(stopwords("spanish")),
+         (!word1 %in% c("https")),
+         (!word2 %in% c("https")),
+         (! is.na(word1)),
+         (! is.na(word2)),
+          !str_detect(word1, pattern = "[[:digit:]]"),
+    !str_detect(word2, pattern = "[[:digit:]]"),
+    !str_detect(word1, pattern = "[[:punct:]]"), 
+    !str_detect(word2, pattern = "[[:punct:]]"),
+    !str_detect(word1, pattern = "(.)\\1{2,}"),
+    !str_detect(word2, pattern = "(.)\\1{2,}"),
+    !str_detect(word1, pattern = "\\b(.)\\b"),
+    !str_detect(word2, pattern = "\\b(.)\\b"))
+# Se puede limpiar mas; ej: cada vez, puede ser, debe ser, tal vez...
+
+
+fem_bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE) %>%
+  rename(weight=n)
+
+fem_bigram_counts
+```
+
+```{r}
+threshold <- 100 
+# Puse 100 pero puede ser menos. Hay conexiones como agresiones sexuales que se pierden. 
+
+# Scale to visualize
+scale_weight <- function(x, lambda) {
+  x / lambda
+}
+
+network <-  fem_bigram_counts %>%
+  filter(weight > threshold) %>%
+  mutate(weight = scale_weight(x = weight, lambda = 2E3)) %>% 
+  graph_from_data_frame(directed = FALSE)
+# Bajarse paquete igraph para que sirva
+
+network
+
+graph_bigram_network <--plot(network, 
+  vertex.size = 0.5,
+  vertex.label.color = 'black', 
+  vertex.label.cex = 0.5, 
+  vertex.label.dist = 0.5,
+  edge.color = 'gray', 
+  main = 'Bigram Count Network', 
+  sub = glue('Weight Threshold: {threshold}'), 
+  alpha = 50
+)
+  
+```
+
+```{r}
+# We can add some additional information to the visualization: Set the sizes of the nodes and the edges by the degree and weight respectively.
+
+# For a weighted network we can consider the weighted degree, which can be computed with the strength function.
+
+V(network)$degree <- strength(graph = network)
+
+# Compute the weight shares.
+E(network)$width <- E(network)$weight/max(E(network)$weight)
+
+graph_bigram_network_weighted <- plot(
+  network, 
+  vertex.color = 'lightblue',
+  # Scale node size by degree.
+  vertex.size = 2*V(network)$degree,
+  vertex.label.color = 'black', 
+  vertex.label.cex = 0.5, 
+  vertex.label.dist = 0.5,
+  edge.color = 'gray', 
+  # Set edge width proportional to the weight relative value.
+  edge.width = 3*E(network)$width ,
+  main = 'Bigram Count Network with weight degree', 
+  sub = glue('Weight Threshold: {threshold}'), 
+  alpha = 50
+)
+
+# Get connected components
+clusters(graph = network)
+
+# Select biggest connected component
+V(network)$cluster <- clusters(graph = network)$membership
+
+cc.network <- induced_subgraph(
+  graph = network,
+  vids = which(V(network)$cluster == which.max(clusters(graph = network)$csize))
+)
+
+cc.network 
+
+# Store the degree
+V(cc.network)$degree <- strength(graph = cc.network)
+
+# Compute the weight shares.
+E(cc.network)$width <- E(cc.network)$weight/max(E(cc.network)$weight)
+
+big_comp_bigram <- plot(cc.network, 
+  vertex.color = 'lightblue',
+  # Scale node size by degree.
+  vertex.size = 10*V(cc.network)$degree,
+  vertex.label.color = 'black', 
+  vertex.label.cex = 0.6, 
+  vertex.label.dist = 1.6,
+  edge.color = 'gray', 
+  # Set edge width proportional to the weight relative value.
+  edge.width = 3*E(cc.network)$width ,
+  main = 'Bigram Count Network (Biggest Connected Component)', 
+  sub = glue('Weight Threshold: {threshold}'), 
+  alpha = 50)
+```
+
+
+# Node importance
+```{r}
+# Compute the centrality measures for the biggest connected component from above.
+node_imp_df <- tibble(
+  word = V(cc.network)$name,  
+  degree = strength(graph = cc.network),
+  closeness = closeness(graph = cc.network), 
+  betweenness = betweenness(graph = cc.network)
+)
+
+# Degree centrality
+deg_centrality <- node_imp_df %>%
+  arrange(- degree)
+
+# Closeness centrality
+close_centrality <- node_imp_df %>% 
+  arrange(- closeness)
+
+# Betweeness centrality
+bet_centrality <- node_imp_df %>% 
+  arrange(- betweenness) 
+```
+
+# Community detection
+```{r}
+comm_det <- cluster_louvain(
+  graph = cc.network, 
+  weights = E(cc.network)$weight
+)
+# Cluster with Louvain Method
+
+comm_det
+```
+
+
+
+# Correlation Analysis
+```{r}
+# Here, we select feature comparisons for just “violencia” and “acoso”, and convert this into a matrix. Because correlations are sensitive to document length, we first convert this into a relative frequency using dfm_weight().
+
+non_congress_dfm_weight <- dfm_weight(non_congress_dfm_full, scheme = "prop")
+non_congress_dfm_matrix <- textstat_simil(non_congress_dfm_weight,
+                                          selection = ("violencia","acoso"),
+                                          method = "correlation",
+                                          margin = "features")
+
+dfm_weight(non_congress_dfm, scheme = "prop") %>% 
+    textstat_simil(selection = c("violencia", "acoso"), method = "correlation", margin = "features") %>%
+    as.matrix() %>%
+    head(2)
+  
+```
+
+# Clustering
+```{r}
+library(quanteda.corpora)
+
+# We trim the corpus with dfm_trim() by keeping only those words that occur at least 100 times in the corpus and in at least ten tweets. 
+cluster_dfm <- dfm(non_congress_corp, 
+               stem = TRUE, remove_punct = TRUE,
+               remove = stopwords("english")) %>% 
+    dfm_trim(min_termfreq =100, min_docfreq = 10)
+
+# Hierarchical clustering - get distances on normalized dfm
+cluster_dfm_weight <- dfm_weight(cluster_dfm, scheme = "prop") %>%
+    textstat_dist(method = "euclidean") %>% 
+    as.dist()
+
+# Hiarchical clustering the distance object
+cluster_hier <- hclust(cluster_dfm_weight)
+
+# label with document names
+cluster_hier$labels <- docnames(cluster_dfm)
+
+# plot as a dendrogram
+plot(cluster_hier, xlab = "", sub = "", 
+     main = "Euclidean Distance on Normalized Token Frequency")
+```
+
+# 
+
+# Built Term Document matrix
+```{r}
+# We  use the colSums() command to get the count of use for every word, which we assign to the vector “word_sums.” Using length() on this vector, we are able to tell that there are 55204 values, or 55204 words.
+word_sums <- colSums(non_congress_dfm)
+length(word_sums)
+
+# In order to then see which words are the most frequent, we create a new data frame from the “word_sums” values, with the data.frame() function. In accordance with the data.frame() syntax, both “word” and “freq” are given as column names, while the number of rows is dictated by the number of values; in this case, that is the 55204 from above. We set row.names = NULL to avoid each row taking on a name, which in this case would be the words themselves. We also add stringsAsFactors = FALSE in order to keep the words in character class.
+
+freq_data <- data.frame(word = names(word_sums), 
+                        freq = word_sums, 
+                        row.names = NULL,
+                        stringsAsFactors = FALSE)
+
+# Finally, we create a data frame which is sorted by the order() function and accompanying decreasing = TRUE argument from most to least common words. We select the freq column to sort on to achieve this goal. So that our created object is a data frame, rather than a vector, we put everything inside of the freq_data[ , ] brackets. This arrangement, in which the brackets and comma designate [row, column], tells R to keep the columns as they are, but to rearrange the order of the rows. That is, to maintain the integrity of the object as a data frame, but reorder it sorting on frequency.
+
+sorted_freq_data <- freq_data[order(freq_data$freq, decreasing = TRUE), ]
+
+# Examining the sorted_freq_data object tells us that some of the most common words with substantive meaning are “mujeres,” “vida,” “Colombia,” “violencia,” and “gobierno,” giving us a brief but only minimally informative look at what activists tweeters are concerned with. It seems that perhaps a different technique than word frequency could give us more insight.
+
+# We cluster:
+
+
+
+
+non_congress_dtm <- as.TermDocumentMatrix(non_congress_corp, 
+                                          control = list(removePunctuation = TRUE,
+                                          removeNumbers = TRUE,
+                                                stopwords = TRUE))
+  
+# DTM package tm; different dfm. 
+```
+
+
+# Word associations
+```{r}
+associations <- findAssocs(non_congress_dfm, "sexual", 0.25)
+```
+
