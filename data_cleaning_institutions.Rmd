@@ -59,6 +59,13 @@ dim(inst_jul_nov_2020)
 ```
 
 ```{r}
+
+
+inst_jul_nov_2020 <- inst_jul_nov_2020 %>% 
+  mutate(id = rownames(inst_jul_nov_2020),
+         text_id = paste(screen_name, id,
+                         sep = "_"))
+
 save(inst_jul_nov_2020, file = "data/inst_jul_nov_2020.RData")
 
 ```
