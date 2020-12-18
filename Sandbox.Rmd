@@ -42,6 +42,80 @@ plot(model_topics_non_congress, type = "labels", labeltype = "prob", topics = 10
  
 ```
 
+#Trying scaling with wordfish 
+
+```{r}
+
+
+Try the same with wordfish 
+
+```{r}
+
+load("data/ind_tweets_on_politics")
+load("data/non_congress_dfm_full")
+
+manifestos <- distinct(tweets_on_politics) %>% group_by(screen_name) %>%
+  summarize(text = paste(text, collapse = " "))
+
+manifestos_corpus <- corpus(x =  manifestos)
+
+manifestos_dfm <- dfm(manifestos_corpus,
+                      ,
+                      tolower = TRUE, # convert all words to lower case 
+                      remove = c(stopwords("spanish")),
+                      remove_punct = TRUE, # remove punctuation
+                      remove_url = TRUE, # remove u
+                      remove_numbers = TRUE,
+                      remove_symbols = TRUE,
+                      verbose = TRUE) # Bueno hacer esta opción para ver que está haciendo el dfm.
+                #it is better not to stem for topic models  
+             
+# Remove mentions (@)
+manifestos_dfm <- dfm_remove(manifestos_dfm,
+                      "@*",
+                      verbose = T)
+
+#Remove hashtags         
+manifestos_dfm <- dfm_remove(manifestos_dfm,
+                      "#*",
+                      verbose = T)
+
+# Remove more stopwords (less than 3 characters)
+manifestos_dfm <- dfm_keep(manifestos_dfm,
+                    min_nchar = 3,
+                      verbose = T)
+
+manifestos_dfm <- dfm_trim(manifestos_dfm, min_termfreq = 5, verbose = TRUE)
+
+wfish <- textmodel_wordfish(manifestos_dfm) 
+#the 
+summary(wfish)
+
+preds  <- predict(wfish, interval = "confidence")
+
+# grab the (only) internal element 'fit' and make it a data frame
+
+preds <- as_tibble(preds$fit)
+
+preds_dv <- mutate(bind_cols(docvars(manifestos_dfm), preds),
+                   user_order = rank(fit)) # add a left to right ordering
+
+ggplot(preds_dv, aes(x = fit, xmin = lwr, xmax = upr,
+                     y = user_order)) +
+  geom_point() +
+  geom_errorbarh(height = 0) +
+   scale_y_continuous(labels = preds_dv$screen_name,
+                     breaks = preds_dv$user_order) +
+  theme_minimal() +
+  labs(y = "",
+       x = "Position",
+       color = "",
+       title = "Scale of latent ideological position",
+       subtitle = "Based on tweets most likely to talk about the political topics")
+
+
+```
+```
 
 
 
