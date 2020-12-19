@@ -10,6 +10,7 @@ library(tidyverse)
 library(quanteda)
 library(readtext) # for getting document and their info into a data frame 
 library(lubridate)
+library(cowplot)
 ```
 
 ```{r}
@@ -71,8 +72,11 @@ unique(fem_jul_nov_2020$name) %>% length()
 # Number of tweets left after trimming: 116402 
 dim(fem_jul_nov_2020)
 
-ggsave(frequency_ind_all, file = "figures/1_frequency_ind_all_time.png")
-ggsave(frequency_ind_trimmed, file = "figures/2_frequency_ind_jul_nov.png")
+#descriptives_ind <- plot_grid(frequency_ind_all, frequency_ind_trimmed)
+#ggsave(descriptives_ind, file = "pruebas/desc.png", width = 8, height = 4)
+
+ggsave(frequency_ind_all, file = "figures/1_frequency_ind_all_time.png", height = 3, width = 5)
+ggsave(frequency_ind_trimmed, file = "figures/2_frequency_ind_jul_nov.png", height = 3, width = 5)
 
 ```
 
