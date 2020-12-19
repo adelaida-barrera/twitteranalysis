@@ -124,9 +124,7 @@ political_scale_ind <- theta %>% arrange(Dim1, screen_name) %>%
        title = "Scale of latent position",
        subtitle = "Based on tweets most likely to talk about the political topics")
 
-ggsave(political_scale_ind, file = "figures/12_scaling_political_ind.png", 
-       height = 7,
-       width = 11)
+ggsave(political_scale_ind, file = "figures/12_scaling_political_ind.png")
 ```
 
 
