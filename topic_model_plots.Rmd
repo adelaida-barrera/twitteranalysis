@@ -118,7 +118,7 @@ frequent_words_ind <- model_top_terms %>%
   theme(text = element_text(size = 9))
 
 # Save plot for report  
-ggsave(frequent_words_ind, file = "figures/5_frequent_words_ind.png")
+ggsave(frequent_words_ind, file = "figures/5_frequent_words_ind.png", height = 4, width = 7)
 ```
 
 ```{r}
@@ -172,7 +172,7 @@ frequent_words_ins
 
 # Save to include in report 
 
-ggsave(frequent_words_ins, file = "figures/6_frequent_words_ins.png")
+ggsave(frequent_words_ins, file = "figures/6_frequent_words_ins.png", height = 4, width = 7)
 
 ```
 
@@ -231,7 +231,8 @@ topics_ind_plot <- gamma_terms %>%
 
 topics_ind_plot
 
-ggsave(topics_ind_plot, file = "figures/7_prevalence_topics_ind.png")
+ggsave(topics_ind_plot, file = "figures/7_prevalence_topics_ind.png",  height = 4, width = 7)
+
 ```
 
 ## Institutional accounts 
@@ -286,7 +287,7 @@ topics_ins_plot <- gamma_terms_ins %>%
 
 topics_ins_plot
 
-
+ggsave(topics_ins_plot, file = "figures/8_prevalence_topics_ins.png", height = 4, width = 7)
 
 ```
 
@@ -346,11 +347,11 @@ weekly_topics <-
                         origin = "2020-01-01"))
   
 # Plotting all topics at once 
-weekly_topics %>%  
+topics_in_time_ind <- weekly_topics %>%  
   ggplot(aes(x = date,
            y = proportion_topic_week,
            color = factor(topic))) +
-  geom_line(alpha = 0.5, size = 0.6) + 
+  geom_line(alpha = 0.4, size = 0.6) + 
   geom_point() + 
   theme_minimal()+
   labs(title = "Proportion of documents from each topic by week (2020)",
@@ -359,24 +360,27 @@ weekly_topics %>%
    scale_color_manual(values = c(colors),
                      name = "Topic")
 
-
+# Save for report 
+ggsave(topics_in_time_ind, file = "figures/9_topics_in_time_ind.png", height = 7, width = 11)
 
 # Closer look at the dynamic between women's rights discourse and national politics  
 
-weekly_topics %>%
+topics_zoom_ind <- weekly_topics %>%
   filter(topic %in% c("Women's rights",
                       "National politics")) %>%  
   ggplot(aes(x = date,
              y = proportion_topic_week,
              color = factor(topic))) +
-  geom_line(alpha = 0.5, size = 0.6) + 
+  geom_line(alpha = 0.4, size = 0.6) + 
   geom_point() + 
   theme_minimal()+
-  labs(title = "Proportion of documents from each topic by week (2020)",
+  labs(title = "Proportion of documents from each topic by week (2020) \n",
         x = "\n Week published",
         y = "Proportion of documents \n") +
   scale_color_manual(values = c(colors),
                      name = "Topic")
+
+ggsave(topics_zoom_ind, file = "figures/11_topics_zoom_ind.png", height = 7, width = 11)
 
 ```
 
@@ -429,22 +433,23 @@ weekly_topics_ins <-
                                  units = "weeks"),
                         origin = "2020-01-01"),
          topic = case_when(
-           topic == 1 ~ "Service provision",
-           topic == 2 ~ "Peace agreement",
-           topic == 3 ~ "Women",
-           topic == 4 ~ "National issues",
-           topic == 5 ~ "Gender violence",
-           topic == 6 ~ "Human Rights",
-           topic == 7 ~ "LGBT /social leaders", 
-           topic == 8 ~ "Reproductive health",
-           topic == 9 ~ "Institutional events", 
-           topic == 10 ~ "Public life"))
-
+           topic == 1 ~ "Violence",
+           topic == 2 ~ "Pandemic & LGBT",
+           topic == 3 ~ "Social policy",
+           topic == 4 ~ "Intitutions' work",
+           topic == 5 ~ "Institutional events",
+           topic == 6 ~ "Armed conflict",
+           topic == 7 ~ "Gender & diversity", 
+           topic == 8 ~ "Women",
+           topic == 9 ~ "Truth comission", 
+           topic == 10 ~ "Reproductive rights"))
 ```  
 
 ```{r}
+
 # Plotting all topics at once 
-weekly_topics_ins %>%  
+
+topics_in_time_ins <- weekly_topics_ins %>%  
   ggplot(aes(x = date,
            y = proportion_topic_week,
            color = factor(topic))) +
@@ -456,11 +461,15 @@ weekly_topics_ins %>%
        y = "Proportion of documents \n") +
    scale_color_manual(values = c(colors),
                      name = "Topic") +
-   ylim(0, 0.4)
+   ylim(0, 0.3)
+
+# Save for report 
+
+ggsave(topics_in_time_ins, file = "figures/10_topics_in_time_inst.png", height = 7, width = 11)
 
 ```
 
-# Gathering a subset of the tweets that mainly talk about political matters.
+# Gathering a subset of the tweets that mainly talk about reproductive health.
 
 ```{r}
 
