@@ -41,17 +41,20 @@ But yes. We know. This is not a complete, balanced, objective picture of the pub
 
 In our initial exploration of the data, we looked at the average tweets per individual account and the less recent tweet by account. We then plotted the frequency of tweets across time:  
  
-*gráfica*
+![](figures/1_frequency_ind_all_time.png)
 
 This exploration showed that, because some of the accounts posted content much less frequently than others, the last 3.200 tweets of each account represented very different time periods. We thus limited our data to tweets from the last 6 months and plotted those:  
 
-*gráfica*
+![](figures/2_frequency_ind_jul_nov.png)
 
 This produced a much more balanced sample, with 67 individual accounts and 116.402 tweets.  
 
 From this sample, we then removed 22 accounts from congresswomen. We decided to do this after having run a topic model with a random sample of 7000 tweets -which was already a stretch for our 2012 laptops. Although we knew this had implications for what we would be able to say about in our analysis later, these accounts had too much content pertaining to topics other than gender / feminism and including them would have made it even harder to get a sense of what public discourse around these issues actually is.  
 
-Finally, we restricted the institutional accounts to match the same period we had chosen for the individual ones, and ended up with 39 accounts and 25.941 tweets. Here, because the institutions we had chosen are explicitly dedicated to the topics we were interested in, there was no need to leave anyone out. Institutions are, well, more institutional...  
+Finally, we restricted the institutional accounts to match the same period we had chosen for the individual ones, and ended up with 39 accounts and 25.941 tweets. Here, because the institutions we had chosen are explicitly dedicated to the topics we were interested in, there was no need to leave anyone out. Institutions are, well, more institutional... 
+
+![](figures/3_frequency_ins_all_time.png)
+![](figures/4_frequency_ins_jul_nov.png)
 
 ## Cleaning the data 
 
@@ -64,11 +67,20 @@ And then, we did it all over again for our institutional accounts. By this time,
 
 ## What are the most common expressions? 
 
+![](figures/5_frequent_words_ind.png)
+![](figures/6_frequent_words_ins.png)
+
 ## What topics can we identify in their accounts? Do different profiles (by occupation talk more about certain topics?) 
+
+![](figures/7_prevalence_topics_ind.png)
+![](figures/8_prevalence_topics_ins.png)
 
 ## What is each topic about? Word-topic probabilities
 
 ## Do these topics change in time? 
+
+![](figures/9_topics_in_time_ind.png)
+![](figures/10_topics_in_time_inst.png)
 
 ## What is the main topic for each account 
 
