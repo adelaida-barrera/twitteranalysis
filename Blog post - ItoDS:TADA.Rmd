@@ -67,15 +67,16 @@ And then, we did it all over again for our institutional accounts. By this time,
 
 ## What are the most common expressions? 
 
-![](figures/5_frequent_words_ind.png)
-![](figures/6_frequent_words_ins.png)
-
 ## What topics can we identify in their accounts? Do different profiles (by occupation talk more about certain topics?) 
 
 ![](figures/7_prevalence_topics_ind.png)
 ![](figures/8_prevalence_topics_ins.png)
 
 ## What is each topic about? Word-topic probabilities
+
+![](figures/5_frequent_words_ind.png)
+
+![](figures/6_frequent_words_ins.png)
 
 ## Do these topics change in time? 
 
