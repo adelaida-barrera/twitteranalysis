@@ -14,7 +14,8 @@ output:
   
 **By Adelaida Barrera (adelaidabarrera@gmail.com), Natalia Mejía, (natimp555@gmail.com), Mariana Saldarriaga (m.saldarriaga15@gmail.com) and Isabel de Brigard (isabeldebrigard@gmail.com)**
 
-# ![](figures/twitterbird.png) Introduction: what we set out to do
+# ![](figures/twitterbird.png) What we set out to do
+
 
 This semester we seem to be uninterruptedly glued to our screens. From zoom, to R, from moodle to social media, more and more of our days are spent in front of our phones or computers. But this trend, though exacerbated by the unusual conditions of the last year (ugh, yes, it has almost been a year) did not start with some flying rodent far away. Digital platforms have carved up more and more of our time, and seem to direct more and more of our actions. As policy students, we were interested in one instance where this seems to be happening very notably: the way twitter communicates, condenses, and shapes public discourse around salient policy issues. -Guess it’s not procrastination if you can call it research…  
 
@@ -34,7 +35,7 @@ Despite all this, we do think we can draw a couple of interesting conclusions fr
 
 # ![](figures/twitterbird.png) The sample
 
-## How did we choose the twitter accounts? How did we gather the data? 
+## Choosing accounts and scraping the data 
 
 Our initial intuition was that certain twitter accounts shape public discourse and that gathering those would give us a balanced and relatively complete picture of what most twitter-talk was about. This is partly the idea behind the *Cifras y conceptos* opinion leaders panel, that traces the opinion of various individuals on a wide range of topics. These opinion leaders, they say, “differ from public opinion in general, because they are the ones who guide the climate of opinion, have the capacity for foresight and influence political issues and issues on the national agenda” (cita https://cifrasyconceptos.com/productos-panel-de-opinion/), an so tracing their points of view should be telling of more than their personal standing on a given topic.  
 
@@ -42,24 +43,40 @@ So we dived into the twitterverse to see who came out to greet us. With a combin
 
 But yes. We know. This is not a complete, balanced, objective picture of the public discourse on twitter on these issues. Moreover, there is no way to know from our data how biased or incomplete our sample is. We know. Remember the part about the research grant? Well, the phone still hasn’t rang. But we decided to keep going with what we had. This was our thinking: our agonizing about how bad our selection was only clarified further what our data science professors have been telling us since Stats I: fancy analytical tools only get you so far. If you actually want to be able to say something about the world, you need to work on your theory. Really work on it. But we felt this was an exercise about the tools we had learned. The tools, not the theory. And for that -to try our hand on a limited sample- we had enough. The rest was standard web scraping. Yes, that phrase actually makes sense to us now. We set up our API authorization and scraped away. And what a beautiful mess we got.  
 
-## What did our  data look like? 
+## What did our data look like? 
 
-In our initial exploration of the data, we looked at the average tweets per individual account and the less recent tweet by account. We then plotted the frequency of tweets across time:  
- 
-![](figures/1_frequency_ind_all_time.png)
+In our initial exploration of the data, we looked at the average tweets per individual account and the less recent tweet by account. We then plotted the frequency of tweets across time (left plot). This exploration showed that, because some of the accounts posted content much less frequently than others, the last 3.200 tweets of each account represented very different time periods. We thus limited our data to tweets from the last 6 months and plotted those (right plot). This produced a much more balanced sample, with 67 individual accounts and 116.402 tweets.  
 
-This exploration showed that, because some of the accounts posted content much less frequently than others, the last 3.200 tweets of each account represented very different time periods. We thus limited our data to tweets from the last 6 months and plotted those:  
+<br>
+<br> 
+```{r, out.width = c('50%', '50%'), fig.show = 'hold', echo=FALSE}
 
-![](figures/2_frequency_ind_jul_nov.png)
+library(knitr)
 
-This produced a much more balanced sample, with 67 individual accounts and 116.402 tweets.  
+include_graphics("figures/1_frequency_ind_all_time.png")
+include_graphics("figures/2_frequency_ind_jul_nov.png")
+
+```
+
+<br>
+<br> 
 
 From this sample, we then removed 22 accounts from congresswomen. We decided to do this after having run a topic model with a random sample of 7000 tweets -which was already a stretch for our 2012 laptops. Although we knew this had implications for what we would be able to say about in our analysis later, these accounts had too much content pertaining to topics other than gender / feminism and including them would have made it even harder to get a sense of what public discourse around these issues actually is.  
 
 Finally, we restricted the institutional accounts to match the same period we had chosen for the individual ones, and ended up with 39 accounts and 25.941 tweets. Here, because the institutions we had chosen are explicitly dedicated to the topics we were interested in, there was no need to leave anyone out. Institutions are, well, more institutional... 
 
-![](figures/3_frequency_ins_all_time.png)
-![](figures/4_frequency_ins_jul_nov.png)
+<br>
+<br> 
+
+```{r, out.width = c('50%', '50%'), fig.show = 'hold', echo=FALSE}
+
+include_graphics("figures/3_frequency_ins_all_time.png")
+include_graphics("figures/4_frequency_ins_jul_nov.png")
+
+```
+
+<br>
+<br> 
 
 ## Cleaning the data 
 
@@ -68,43 +85,85 @@ We removed stop words (both those that come in the *tm* package, as some we comp
 
 And then, we did it all over again for our institutional accounts. By this time, this project was beginning to feel a little like what we figure raising twins must be like: you do a lot of cleaning. And you do it all twice. But we have gotten this far. And we were finally ready to see what all these tweets were about.  
 
-# ![](figures/twitterbird.png) What are individual and institutional accounts talking about?
+# ![](figures/twitterbird.png) What are these tweets about?
 
 ## What are the most common expressions? 
 
-## What topics can we identify in their accounts? Do different profiles (by occupation talk more about certain topics?) 
+## What topics can we identify? 
 
-![](figures/7_prevalence_topics_ind.png)
-![](figures/8_prevalence_topics_ins.png)
+### Institutional accounts' topics 
 
-## What is each topic about? Word-topic probabilities
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/6_frequent_words_ins.png")
+```
 
-![](figures/5_frequent_words_ind.png)
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/8_prevalence_topics_ins.png")
+```
 
-![](figures/6_frequent_words_ins.png)
+### Individual accounts' topics 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/5_frequent_words_ind.png")
+```
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/7_prevalence_topics_ind.png")
+```
+
+## Do topics differ by occupation? 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/7_1_plot_topic_occupations.png")
+```
 
 ## Do these topics change in time? 
 
-![](figures/9_topics_in_time_ind.png)
-![](figures/10_topics_in_time_inst.png)
+### Individual accounts 
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/9_topics_in_time_ind.png")
+```
 
-## What is the main topic for each account 
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/11_topics_zoom_ind.png")
+```
 
-## Document-topic probabilities
+### Institutional accounts 
 
-# ![](figures/twitterbird.png) How do they relate / differ from each other 
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/10_topics_in_time_inst.png")
+```
 
-## How would they be distributed if put in a single scale? What do the extremes of the scale seem to represent?  
+# ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-## Where would main twitter opinion leaders be in their scale? 
+## How would they be distributed if put in a single space? 
+
+### Tweets on politics 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/12_scaling_political_ind.png")
+```
+
+### Tweets on reproductive health
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/13_plot_reproductive_scale_ins.png")
+```
+
+*What do the extremes of the scale seem to represent?*  
+
 
 ## How are they connected on Twitter?
 
+
 # ![](figures/twitterbird.png) How do they feel about controversial topics?	How do they feel about the issue of trans women? 
+
 
 ## How do they feel about the issue of sexual misconduct ? 
 
+
 ## How do they feel about the issue of abortion ?
+
 
 ## How do they feel about the issue of sexual work? 
 
