@@ -56,12 +56,11 @@ frequency_inst_trimmed <- inst_jul_nov_2020 %>%
     geom_line(color = "#F59824")+
     theme_minimal() +
     labs(title = "Frequency of scraped tweets Jul-Dec 2020",
-       subtitle = "3200 tweets per account (institutional accounts)",
        x = "Date", 
        y = "Tweets per day")
 
-ggsave(frequency_inst_all, file = "figures/3_frequency_ins_all_time.png")
-ggsave(frequency_inst_trimmed, file = "figures/4_frequency_ins_jul_nov.png")
+ggsave(frequency_inst_all, file = "figures/3_frequency_ins_all_time.png", height = 3, width = 5)
+ggsave(frequency_inst_trimmed, file = "figures/4_frequency_ins_jul_nov.png", height = 3, width = 5)
 
 # Number of accounts left after trimming data : 39 
 unique(inst_jul_nov_2020$name.x) %>% length()
