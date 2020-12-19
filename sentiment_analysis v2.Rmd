@@ -1,0 +1,154 @@
+---
+title: "sentiment_analysis"
+author: "Mariana Saldarriaga"
+date: "12/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+theme_set(theme_minimal())
+
+library(quanteda)
+library(quanteda.textmodels)
+library(glmnet)
+library(caret)
+library(plotROC)
+
+## sentiment - the old way
+remotes::install_github("quanteda/quanteda.sentiment")
+library(quanteda.sentiment)
+corp_tweets <- non_congress_corp
+summary(corp_tweets, 5)
+
+mmovierev <- dfm(data_corpus_moviereviews)
+
+```
+
+
+
+
+
+# or data_dictionary_geninqposneg
+res <- textstat_polarity(corp_movies,
+                         data_dictionary_LSD2015)
+# We need to check for the polarity 
+res$sent_prob <- 1/(1 + exp(-res$sentiment))
+
+# Since the first 1000 reviews are negative and the remaining
+# reviews are classified postive
+# draw a random sample of the documents.
+
+set.seed(800)
+id_train <- sample(1:2000, 1500)
+head(id_train, 10)
+
+corp_movies$id_numeric <- 1:ndoc(corp_movies)
+
+# train
+train_corp <- corpus_subset(corp_movies,
+                                id_numeric %in% id_train)
+# To split in two
+
+dfmat_train <- dfm(train_corp,
+                   remove = stopwords("en"),
+                   remove_number = TRUE,
+                   stem = TRUE)
+# We want document-matrix
+# For sentiment analysis, not so much difference.
+
+# test
+test_corp <- corpus_subset(corp_movies, !id_numeric %in% id_train)
+dfmat_test <- dfm(test_corp,
+                  remove = stopwords("en"),
+                  remove_number = TRUE,
+                  stem = TRUE)
+# Also, we wanted a document-matrix
+
+yval <- as.integer(dfmat_training$sentiment == "pos") # Superfluous line
+
+lasso <- cv.glmnet(x = dfmat_training,
+                   y = dfmat_training$sentiment, # use pause_neg
+                   alpha = 1, # 0 (ridge) to 1 (lasso) # lasso to regularize... only words that we need
+                   nfold = 5, 
+                   family = "binomial")
+# Cross validation, which sort of words should we choose. 
+# How many should we drop. 
+# To give us entire model. 
+
+index_best <- which(lasso$lambda == lasso$lambda.min)
+# Parameter how hard are we schrinking in. Why min? Best option. 
+
+beta <- lasso$glmnet.fit$beta[, index_best]
+# Tell us which words are being picked. 
+head(sort(beta, decreasing = TRUE), 20)
+# Correlates of positive reviews. What we expected. 
+# Very specific to this domain. 
+# We could also train this classifier. 
+# We are not interested in the words, but in the performance. 
+
+table(beta == 0.0)
+# Many must be setted to 0. 
+
+# Make them match; not drop document feature matrix. 
+dfmat_matched <- dfm_match(dfmat_test,
+                           features = featnames(dfmat_training))
+# It is going to adjust the match. 
+
+predicted_prob <- predict(lasso, dfmat_matched, # The last is new data
+                          type = "response",
+                          s = lasso$lambda.min) # For what we did cross validation
+head(predicted_prob)
+
+# Error analysis: confusion matrix (to compare)
+actual_class <- dfmat_matched$sentiment
+head(actual_class)
+class(actual_class)
+lasso_class <- factor(predict(lasso, dfmat_matched, type = "class")) 
+#predicted_class <- as.integer(lasso_class)
+#predicted_prob <- predict(lasso, dfmat_matched, type = "response")
+tab_class <- table(actual_class, lasso_class) # Then just cross tabulate
+tab_class
+# 35 times and 62 times missed it 
+# dfm_tfidt (divide frequency of the term; balance frequent and specific)
+
+# How well it does?
+# Error analysis: ROC curves
+lasso_prob <- predicted_prob[,1]
+dict_prob <- res$sent_prob[-id_train]
+dict_sent <- res$sentiment[-id_train]
+
+plot(predicted_prob[,1], dict_prob) 
+cor(predicted_prob[,1], dict_sent) # Correlation not too much. 
+# Question: who is right?
+
+# for the purposes of roc, let's transform actual_class
+# into a 0/1 variable for comparison to the predicted probability
+
+# We are going to plot false positive, and false negative. 
+# And contrasting one with another. 
+
+levels(actual_class) # 0 -> "neg" and 1 -> "pos" so as.numeric will work
+
+actual_class_binary <- as.numeric(actual_class)-1
+calculate_roc(lasso_prob, actual_class_binary) # Always comparing with the right answer. 
+calculate_roc(dict_prob, actual_class_binary)
+
+rs <- data.frame(M = c(dict_prob, lasso_prob),
+                 D = c(actual_class_binary, actual_class_binary),
+                 classifier = rep(c("dict", "lasso"), each = 500))
+class(rs$D)
+
+p <- ggplot(rs, aes(m = M, d = D, color = classifier)) +
+  geom_roc()
+p
+
+# If we move the threshold values we are going to move everything (the tradeoff).
+
+
+# two single number summaries
+calc_auc(p)
+
+
+# More ROC interpretation help here:
+# https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5

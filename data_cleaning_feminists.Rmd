@@ -6,25 +6,21 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-
 library(tidyverse)
 library(quanteda)
 library(readtext) # for getting document and their info into a data frame 
-library(tm)
 library(lubridate)
-
-# Set seed
-
 ```
 
 ```{r}
+
+# Load dataframe with all tweets from individual accounts scraped from twitter
 load("data/tweets_feminists.RData")
 
-
+#Create a new variable with day of publication
 feminists <- feminists %>% 
   mutate(created_at = as_date(created_at),
          day_published = ymd(created_at)) 
-
 ```
 
 # Initial exploration of the data of individual feminist accounts 
@@ -39,26 +35,35 @@ feminists %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arr
 
 # Frequency of tweets across time: too skewed due to some accounts tweeting too little
  
-feminists %>% 
+frequency_ind_all <- feminists %>% 
   group_by(day_published) %>% 
   summarize(tweets_per_day = n()) %>% 
     ggplot(aes(x = day_published,
                y = tweets_per_day)) +
-    geom_line()+
-    theme_minimal()
+    geom_line(color = "#3EA3B3")+
+    theme_minimal()+
+   labs(title = "Frequency of tweets as scraped with Twitter API",
+        subtitle = "3200 tweets per account (individual accounts)",
+        x = "Date", 
+        y = "Tweets per day")
+       
 
 # Trim dataframe to leave only last 6 months
 
 fem_jul_nov_2020 <- feminists %>% filter(day_published >= "2020-07-01")       
 
 # Frequency of tweets per day from July 2020 to November 2020: more balanced
-fem_jul_nov_2020 %>% 
+
+frequency_ind_trimmed <- fem_jul_nov_2020 %>% 
   group_by(day_published) %>% 
   summarize(tweets_per_day = n()) %>% 
     ggplot(aes(x = day_published,
                y = tweets_per_day)) +
-    geom_line()+
-    theme_minimal()
+    geom_line(color = "#3EA3B3")+
+    theme_minimal() +
+  labs(title = "Frequency of scraped tweets in Jul-Dec 2020",
+       x = "Date", 
+       y = "Tweets per day")
 
 # Number of accounts left after trimming data : 67 
 unique(fem_jul_nov_2020$name) %>% length()
@@ -66,15 +71,20 @@ unique(fem_jul_nov_2020$name) %>% length()
 # Number of tweets left after trimming: 116402 
 dim(fem_jul_nov_2020)
 
+ggsave(frequency_ind_all, file = "figures/1_frequency_ind_all_time.png")
+ggsave(frequency_ind_trimmed, file = "figures/2_frequency_ind_jul_nov.png")
+
 ```
 
 # Trimming dataframe 
 ```{r}
 
-# Removing the congressswomen to get more stable speech
+# Removing the congressswomen to get more stable speech (decided after exploring with topic models)
+
 non_congress <- fem_jul_nov_2020 %>%
   filter(main_occupation != "congressperson") 
 
+# ! Important, create a variable identifying the document with name of user and number of tweet 
 non_congress <- non_congress %>% 
   mutate(id = rownames(non_congress),
          text_id = paste(screen_name, id,
@@ -86,6 +96,8 @@ save(non_congress, file = "data/non_congress_fem_jul_nov_2020.RData")
 #Clean data and create sample for topic model of feminist accounts
 
 ```{r}
+
+# From the 90+ variables in the tweetr output, select the relevant one for the analysis
 
 non_congress <- 
   non_congress %>% 
@@ -147,7 +159,7 @@ save(non_congress_dfm_full, file = "data/non_congress_dfm_full")
 
 ```{r}
 
-# For testing the model, create a subset to avoid long processing times 
+# For testing the model, create a subset to avoid long processing times. This was used to define number of topics. Later the model was run in the whole dfm.
 
 #Creating a random sample of 7000 tweets to test the topic model (full dfm is too large)
 #sample_non_congress_topicmodel <- dfm_sample(x = non_congress_dfm, size = 7000, margin = "documents")
