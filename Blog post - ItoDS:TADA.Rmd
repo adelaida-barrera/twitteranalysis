@@ -1,9 +1,14 @@
 ---
+title: "Feminism in Colombian twitter discourse"
+author: "Adelaida Barrera, Isabel de Brigard, Natalia Mejía, Mariana Saldarriaga"
+date: "19/12/2020"
 output:
  html_document:
    toc: true
    toc_float: true
+   theme: "paper"
 ---
+
 ![](figures/Title.png)
 **Final project for the Introduction to Data Science / Text as Data class**  
   
