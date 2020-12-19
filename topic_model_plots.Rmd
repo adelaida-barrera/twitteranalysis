@@ -465,7 +465,42 @@ topics_in_time_ins <- weekly_topics_ins %>%
 
 # Save for report 
 
-ggsave(topics_in_time_ins, file = "figures/10_topics_in_time_inst.png", height = 7, width = 11)
+ggsave(topics_in_time_ins, file = "figures/10_topics_in_time_inst.png", height = 8, width = 15)
+
+```
+
+
+# Plotting topics by ocuppation 
+
+```{r}
+
+plot_topic_occupations <- non_congress_wgammas %>% 
+  group_by(main_occupation, topic) %>% 
+  summarise(n_docs_per_topic_given_occupation = n())
+
+plot_topic_occupations <- ggplot(plot_topic_occupations,
+       aes(x = factor(topic),
+           y = n_docs_per_topic_given_occupation,
+           fill = factor(topic))) +
+  geom_col() +
+  facet_wrap(~main_occupation, scales = "free") +
+  labs(title = "Distribution of documents in different topics by occupation of user",
+       subtitle = "Individual accounts",
+       x = "Topic", 
+       y = "Number of documents") +
+  scale_fill_discrete(name = "Topic") +
+  theme_minimal() +
+  scale_fill_manual(values = c(colors), 
+                    name = "Topic", 
+                    labels =topic_labels) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 10)) +
+  guides(fill = guide_legend(keywidth = 0.7, keyheight = 0.7))
+
+ggsave(plot_topic_occupations, file = "figures/7_1_plot_topic_occupations.png",
+       height = 7,
+       width = 11)
 
 ```
 
