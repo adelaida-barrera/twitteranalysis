@@ -7,7 +7,7 @@ output:
 ![](figures/Title.png)
 **Final project for the Introduction to Data Science / Text as Data class**  
   
-**By Adelaida Barrera, Natalia Mejía, Mariana Saldarriaga and Isabel de Brigard**
+**By Adelaida Barrera (adelaidabarrera@gmail.com), Natalia Mejía, (natimp555@gmail.com), Mariana Saldarriaga (m.saldarriaga15@gmail.com) and Isabel de Brigard (isabeldebrigard@gmail.com)**
 
 # ![](figures/twitterbird.png) Introduction: what we set out to do
 
