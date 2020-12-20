@@ -181,7 +181,10 @@ Some things caught our eye:
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. 
+Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics. 
+
+It is important to mention that inside our selected categories (political topics and reproductive health) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one topic. This is why, we believe the topic model has some limitations with twitter data and more manual classification is needed to improve precision. 
+
 
 ## How would they be distributed if put in a single space? 
 
