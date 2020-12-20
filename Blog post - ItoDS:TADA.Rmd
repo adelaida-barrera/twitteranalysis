@@ -204,8 +204,9 @@ Lacadavidc, an activist, distances from the group positioning beyond -3, this co
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/13_plot_reproductive_scale_ins.png")
 ```
-
 *What do the extremes of the scale seem to represent?*  
+
+The institutional accounts scale discussing reproductive rights topics show us an interesting account grouping. The accounts close to 0 and the positive quadrant are institutions that advocate for women´s rights: Women_ Equity, Women Commission Colombia, Women Secretary and ONU Women, so these accounts mainly use vocabulary related to women and their reproductive rights. In the middle, between -2 and 0, the spectrum opens more, and we can find activists twitter accounts, these accounts are close to each other which means they use similar vocabulary and discuss similar topics, for instance, regarding abortion and the LGBT community. The last group is the Constitutional Court and the Truth Commission, we believe they are the extreme left because they use a different language compared to the other institutions or activists accounts, and they discuss a variety of topics regarding reproductive rights beyond women. 
 
 
 ## How are they connected on Twitter?
