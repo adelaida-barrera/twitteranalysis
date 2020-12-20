@@ -181,7 +181,7 @@ Some things caught our eye:
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. The scale goes from -3 to 1, representing the political position of the account; it goes to -3 since the main part of the accounts tend to the left. 
+Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. 
 
 ## How would they be distributed if put in a single space? 
 
