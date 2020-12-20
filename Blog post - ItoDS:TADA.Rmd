@@ -194,7 +194,10 @@ It is important to mention that inside our selected categories (political topics
 include_graphics("figures/12_scaling_political_ind.png")
 ```
 
-Analyzing the scale based on tweets discussing political topics, it is possible to observe that from the sample of 25 twitter accounts, only three of them position in the positive quadrant, one in 0 and the rest of them in the negative quadrant. These results imply that most of the twitter accounts selected, when discussing political topics, tend to the left. It is interesting to see the occupation of the extreme values and the neutral one, the most extreme value to the left is from an activist, to the right from an actress, and the neutral from a lawyer.
+Analyzing the scale based on tweets discussing political topics, it is possible to observe that from the sample of 25 twitter accounts, only three of them position in the positive quadrant, one in 0 and the rest of them in the negative quadrant. These results imply that most of the twitter accounts selected, when discussing political topics, use similar vocabulary, so they are close to each other in the scale. 
+
+Lacadavidc, an activist, distances from the group positioning beyond -3, this could be due for her polemic positions against the women trans movement. In contrast, we observe alejaoficial, who positions almost in 1, she is a famous artist who advocates against women violence. The scale shows these two women, even though they talk about women´s rights, they do it using different vocabulary.
+
 
 ### Tweets on reproductive health
 
