@@ -191,6 +191,8 @@ Now we move to positions! We want to know how each twitter account live in space
 include_graphics("figures/12_scaling_political_ind.png")
 ```
 
+Analyzing the scale based on tweets discussing political topics, it is possible to observe that from the sample of 25 twitter accounts, only three of them position in the positive quadrant, one in 0 and the rest of them in the negative quadrant. These results imply that most of the twitter accounts selected, when discussing political topics, tend to the left. It is interesting to see the occupation of the extreme values and the neutral one, the most extreme value to the left is from an activist, to the right from an actress, and the neutral from a lawyer.
+
 ### Tweets on reproductive health
 
 ```{r, fig.show = 'hold', echo=FALSE}
