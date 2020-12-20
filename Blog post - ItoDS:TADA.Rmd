@@ -173,6 +173,11 @@ Some things caught our eye:
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/10_topics_in_time_inst.png")
 ```
+Some things caught our eye:  
+<ul> 
+
++	The highest proportion of documents talk about women and institutional events
++	Violence has a peak between September and October that coincides with the peak in the individual accounts regarding State violence
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
