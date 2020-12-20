@@ -1,0 +1,117 @@
+---
+title: "Untitled"
+author: "Adelaida Barrera"
+date: "12/19/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(quanteda)
+library(ca)
+library(kableExtra)
+library(knitr)
+
+```
+
+# Trying out scaling only with tweets with highest proportion of political topics
+
+```{r}
+
+# load subset of tweets and full dfm
+load("data/ind_tweets_on_rephealth")
+load("data/full_institutions_dfm.Rdata")
+
+manifestos <- distinct(tweets_on_rephealth) %>% group_by(screen_name) %>%
+  summarize(text = paste(text, collapse = " "))
+
+manifestos_corpus <- corpus(x =  manifestos)
+
+manifestos_dfm <- dfm(manifestos_corpus,
+                      tolower = TRUE, # convert all words to lower case 
+                      remove = c(stopwords("spanish")),
+                      remove_punct = TRUE, # remove punctuation
+                      remove_url = TRUE, # remove u
+                      remove_numbers = TRUE,
+                      remove_symbols = TRUE,
+                      verbose = TRUE,
+                      stem = T) # Bueno hacer esta opción para ver que está haciendo el dfm.
+                #it is better not to stem for topic models  
+             
+# Remove mentions (@)
+manifestos_dfm <- dfm_remove(manifestos_dfm,
+                      "@*",
+                      verbose = T)
+
+#Remove hashtags         
+manifestos_dfm <- dfm_remove(manifestos_dfm,
+                      "#*",
+                      verbose = T)
+
+# Remove more stopwords (less than 3 characters)
+manifestos_dfm <- dfm_keep(manifestos_dfm,
+                    min_nchar = 3,
+                      verbose = T)
+
+docnames(manifestos_dfm) <- manifestos$screen_name
+
+sparsity(manifestos_dfm)
+
+rephealth_dfm <- dfm_trim(manifestos_dfm, min_termfreq = 5, verbose = TRUE)
+
+rephealth_matrix <- data.matrix(rephealth_dfm)
+
+# Remove rows with no counts on any of the remaining features
+rephealth_matrix <- rephealth_matrix[rowSums(rephealth_matrix != 0) != 0,] 
+
+model_rephealth <- ca(rephealth_matrix)
+```
+
+```{r}
+
+# Gather document positions (thetas) and word positions (betas)
+
+theta <- model_rephealth$rowcoor
+
+theta <- theta %>% 
+  as.data.frame() %>% 
+  select(Dim1) %>% 
+  arrange(desc(Dim1)) %>% 
+  rownames_to_column(var = "screen_name")
+
+meta <- tweets_on_rephealth %>% select(screen_name)
+meta$topic <- NULL
+meta <- unique(meta)
+
+theta <- left_join(theta, 
+                   meta,
+                   by = "screen_name") %>% 
+  mutate(user_order = rank(Dim1)) %>% 
+  arrange(user_order)
+
+```
+
+```{r}
+
+rephealth_scale_ind <- theta %>% arrange(Dim1, screen_name) %>% 
+  ggplot(aes(x = Dim1,
+             y = user_order)) +
+  geom_point(color = "#E63D3D") +
+  scale_y_continuous(labels = theta$screen_name,
+                     breaks = theta$user_order) +
+  theme_minimal() +
+  labs(y = "",
+       x = "Position",
+       color = "",
+       title = "Scale of latent position (institutional accounts)",
+       subtitle = "Based on tweets most likely to talk about the reproductive health topics")
+
+rephealth_scale_ind 
+
+ggsave(rephealth_scale_ind , file = "figures/13_plot_reproductive_scale_ins.png")
+```
+
+

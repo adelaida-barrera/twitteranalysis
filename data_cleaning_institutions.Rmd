@@ -11,14 +11,15 @@ library(readtext) # for getting document and their info into a data frame
 library(tm)
 library(lubridate)
 library(ggplot2)
-#Exploring the data 
 
+#Exploring the data 
 load("data/tweets_institutions.RData")
 ```
 
 # Initial exploration of the data 
-
 ```{r}
+
+
 
 # Average tweets per account 
 institutions %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_tweets = mean(n))
@@ -26,31 +27,40 @@ institutions %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_
 # Less recent tweet by account 
 institutions %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arrange(desc(min))
 
-# Frequency of tweets across time: too skewed due to some accounts tweeting too little
- 
+# Create a varaible with day of publishing
 institutions <- institutions %>% 
   mutate(created_at = as_date(created_at),
          day_published = ymd(created_at)) 
 
-institutions %>% 
+# Frequency of tweets across time: too skewed due to some accounts tweeting too little
+frequency_inst_all <- institutions %>% 
   group_by(day_published) %>% 
   summarize(tweets_per_day = n()) %>% 
     ggplot(aes(x = day_published,
                y = tweets_per_day)) +
-    geom_line()+
-    theme_minimal()
+    geom_line(color = "#F59824")+
+    theme_minimal() +
+  labs(title = "Frequency of tweets as scraped with Twitter's API", 
+       subtitle = "3200 tweets per account (institutional accounts)", 
+       x = "Date",
+       y = "Tweets per day")
 
 inst_jul_nov_2020 <- institutions %>% filter(day_published >= "2020-07-01")    
 
-
 # Frequency of tweets per day from July 2020 to November 2020: more balanced
-inst_jul_nov_2020 %>% 
-  group_by(day_published) %>% 
+frequency_inst_trimmed <- inst_jul_nov_2020 %>% 
+   group_by(day_published) %>% 
   summarize(tweets_per_day = n()) %>% 
     ggplot(aes(x = day_published,
                y = tweets_per_day)) +
-    geom_line()+
-    theme_minimal()
+    geom_line(color = "#F59824")+
+    theme_minimal() +
+    labs(title = "Frequency of scraped tweets Jul-Dec 2020",
+       x = "Date", 
+       y = "Tweets per day")
+
+ggsave(frequency_inst_all, file = "figures/3_frequency_ins_all_time.png", height = 3, width = 5)
+ggsave(frequency_inst_trimmed, file = "figures/4_frequency_ins_jul_nov.png", height = 3, width = 5)
 
 # Number of accounts left after trimming data : 39 
 unique(inst_jul_nov_2020$name.x) %>% length()
@@ -126,11 +136,13 @@ docnames(corpdfm_i) <- inst_jul_nov_2020$text_id
 
 institutions_dfm_full <- corpdfm_i
 
-save(institutions_dfm_full, file = "data/full_institutions_dfm.Rdata")
+#Save full DFM 
+#save(institutions_dfm_full, file = "data/full_institutions_dfm.Rdata")
 
-sample_institutions_topicmodel <- dfm_sample(x = corpdfm_i, size = 7000, margin = "documents")
+#DFM sample used temporarily to test out topic models
+#sample_institutions_topicmodel <- dfm_sample(x = corpdfm_i, size = 7000, margin = "documents")
 
 # Save the sample dfm to use for topic modelling and scaling 
-save(sample_institutions_topicmodel, file = "data/sample_institutions_topicmodel.RData")
+#save(sample_institutions_topicmodel, file = "data/sample_institutions_topicmodel.RData")
 
 ```

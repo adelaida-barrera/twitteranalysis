@@ -1,0 +1,215 @@
+---
+output:
+ html_document:
+   toc: true
+   toc_float: true
+   theme: "paper"
+---
+
+![](figures/Title.png)
+**Final project for the Introduction to Data Science / Text as Data class**  
+  
+**By Adelaida Barrera (adelaidabarrera@gmail.com), Natalia Mejía, (natimp555@gmail.com), Mariana Saldarriaga (m.saldarriaga15@gmail.com) and Isabel de Brigard (isabeldebrigard@gmail.com)**
+
+# ![](figures/twitterbird.png) What we set out to do
+
+
+This semester we seem to be uninterruptedly glued to our screens. From zoom, to R, from moodle to social media, more and more of our days are spent in front of our phones or computers. But this trend, though exacerbated by the unusual conditions of the last year (ugh, yes, it has almost been a year) did not start with some flying rodent far away. Digital platforms have carved up more and more of our time, and seem to direct more and more of our actions. As policy students, we were interested in one instance where this seems to be happening very notably: the way twitter communicates, condenses, and shapes public discourse around salient policy issues. -Guess it’s not procrastination if you can call it research…  
+
+But the question “How does Twitter shape public discourse?” seemed a bit ambitious for finals and the four hours of daylight Berlin offers at the end of the year. So we decided to narrow our focus and explore the public discourse around feminism and gender issues revealed by a select (yes, *select* as in selected by us, more on this in a minute) group of twitter accounts of activists, political leaders, writers, and all around opinion shapers from Colombia. We wanted to flex our newly acquired web scraping and text mining muscles, as well as try our hand at some initial network analysis. It was a bumpy-but-fun road that mostly got us excited to keep at it, till we are fully fluent in data science (looking at you regular expressions).  
+
+In what follows you will find, first, a brief section on our sample. From how we chose the accounts and what a savage beast our data was at the beginning, to how we tried to tame it and what it looked like when finally we decided to take it for a spin. Then we will get down to business and, with the help of some bi-grams and topic modeling, ask what these accounts actually talk about. We will then attempt to understand how they relate to or differ from one another. You’ll find some scaling and some network analysis. Finally, with the help of sentiment analysis, we will explore how these tweeters feel about a couple of interesting and somewhat controversial topics.  
+ 
+Because we are in academia after all, a few caveats before we begin.  
+<ul> 
++ We are aware that the results we get are not robust enough to support any life altering hypothesis. For the most part, what we get is an interesting exploration of the methods we learned, and a whole lot of experience as to how difficult it is to do original, high-quality, data-driven research. Who knew.  
++ Will tried to warn us: the assumptions that we need to make to take a TADA approach are strong and not always easily fulfilled. And twitter is hardly a place one associates with stability or convention. However, we were also told we could leave our linguistic and psychological aspirations at the door and still have some fun just treating text as data. Explicar esto mejor.  
++ We are particularly self-conscious about our scaling space and the potential substantial meaning for it. Beyond the humble realm of our data, it might not be enough to justify any interpretations about what it could be describing. Nonetheless, within our bounds, we found some interesting stuff. Bare with us, and leave generalizations for after we win that huge research grant.  
+
+Despite all this, we do think we can draw a couple of interesting conclusions from this first glimpse into our local twitterverse. These are the highlights:  
+(Aquí pondría un par de bulletpoints con algunas conclusiones que queden al final, si queda alguna.)
+
+
+# ![](figures/twitterbird.png) The sample
+
+## Choosing accounts and scraping the data 
+
+Our initial intuition was that certain twitter accounts shape public discourse and that gathering those would give us a balanced and relatively complete picture of what most twitter-talk was about. This is partly the idea behind the *Cifras y conceptos* opinion leaders panel, that traces the opinion of various individuals on a wide range of topics. These opinion leaders, they say, “differ from public opinion in general, because they are the ones who guide the climate of opinion, have the capacity for foresight and influence political issues and issues on the national agenda” (cita https://cifrasyconceptos.com/productos-panel-de-opinion/), an so tracing their points of view should be telling of more than their personal standing on a given topic.  
+
+So we dived into the twitterverse to see who came out to greet us. With a combination of research, personal experience and some calls to people in the Colombian political sphere we came up with 69 individuals and 39 institutional accounts that we felt had to be included if we were interested in what was being said about feminism and gender issues. This gave us an initial tweet count of upwards of XXX, which seemed like a decent amount of text to begin with.  
+
+But yes. We know. This is not a complete, balanced, objective picture of the public discourse on twitter on these issues. Moreover, there is no way to know from our data how biased or incomplete our sample is. We know. Remember the part about the research grant? Well, the phone still hasn’t rang. But we decided to keep going with what we had. This was our thinking: our agonizing about how bad our selection was only clarified further what our data science professors have been telling us since Stats I: fancy analytical tools only get you so far. If you actually want to be able to say something about the world, you need to work on your theory. Really work on it. But we felt this was an exercise about the tools we had learned. The tools, not the theory. And for that -to try our hand on a limited sample- we had enough. The rest was standard web scraping. Yes, that phrase actually makes sense to us now. We set up our API authorization and scraped away. And what a beautiful mess we got.  
+
+## What did our data look like? 
+
+In our initial exploration of the data, we looked at the average tweets per individual account and the less recent tweet by account. We then plotted the frequency of tweets across time (left plot). This exploration showed that, because some of the accounts posted content much less frequently than others, the last 3.200 tweets of each account represented very different time periods. We thus limited our data to tweets from the last 6 months and plotted those (right plot). This produced a much more balanced sample, with 67 individual accounts and 116.402 tweets.  
+
+<br>
+<br> 
+```{r, out.width = c('50%', '50%'), fig.show = 'hold', echo=FALSE}
+
+library(knitr)
+
+include_graphics("figures/1_frequency_ind_all_time.png")
+include_graphics("figures/2_frequency_ind_jul_nov.png")
+
+```
+
+<br>
+<br> 
+
+From this sample, we then removed 22 accounts from congresswomen. We decided to do this after having run a topic model with a random sample of 7000 tweets -which was already a stretch for our 2012 laptops. Although we knew this had implications for what we would be able to say about in our analysis later, these accounts had too much content pertaining to topics other than gender / feminism and including them would have made it even harder to get a sense of what public discourse around these issues actually is.  
+
+Finally, we restricted the institutional accounts to match the same period we had chosen for the individual ones, and ended up with 39 accounts and 25.941 tweets. Here, because the institutions we had chosen are explicitly dedicated to the topics we were interested in, there was no need to leave anyone out. Institutions are, well, more institutional... 
+
+<br>
+<br> 
+
+```{r, out.width = c('50%', '50%'), fig.show = 'hold', echo=FALSE}
+
+include_graphics("figures/3_frequency_ins_all_time.png")
+include_graphics("figures/4_frequency_ins_jul_nov.png")
+
+```
+
+<br>
+<br> 
+
+## Cleaning the data 
+
+With our data ready and the help of quantada, we created a corpus. Finally, *text was data*. And so we did what any text miner would do: we got our rags and buckets out, put our aprons on, and began cleaning.  
+We removed stop words (both those that come in the *tm* package, as some we compiled in our own list), punctuation, numbers, and symbols. Then we removed mentions: we were after the what is what, more than the who is who of Colombian feminist tweeter. (And we would get to connections later on, with the network analysis.) Next were hashtags. Here, again, we understood that this would limit our analysis somewhat, but we felt we had a solid theory based reason for it. So we had that going for us, which is nice. The reason is that hashtags tend to work globally, as a shortcut to the apparently borderless internet conversacion. And we felt including them might disrupt the picture of the more local discourse we were trying to paint. (Esto no creo que esté bien explicado.)  
+
+And then, we did it all over again for our institutional accounts. By this time, this project was beginning to feel a little like what we figure raising twins must be like: you do a lot of cleaning. And you do it all twice. But we had gotten this far. And we were finally ready to see what all these tweets were about.  
+
+# ![](figures/twitterbird.png) What are these tweets about?
+
+We got our dfm for individual accounts and turned it into a stm corpus to run our topic model and defined 10 topics most prevalent in the tweets we had. And yes, we then did it again for the institutional accounts. We broadly identified what the 10 topics were for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. But all in all what we got seemed reasonable.  
+
+## What topics can we identify? 
+
+### Topics in institutional accounts
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/8_prevalence_topics_ins.png")
+``` 
+
+Our chosen institutions spend a lot of time tweeting about women in the public sphere (well, duh...). They also use twitter to talk about their institutional events and work, which was also to be expected. And then it gets more interesting. Institutional accounts talk almost as much about social policy, as they talk about violence. And both the armed conflict and the truth commission figure prominently.  
+
+The model also picked up the conversation about reproductive rights that was sparked by an attempt made mid November to re-criminalize the three grounds on which abortion is currently legal in Colombia. In line with the decision of the supreme court -which upheld its 2006 verdict de-criminalizing abortions under certain circumstances-, the accounts we chose talk about abortion in terms of rights and access.  
+
+Another cluster of discourse formed around the LGBT community and the pandemic. This is probably due to the escalation of police violence against the LGBT community in their efforts to enforce curfews put in place due to the pandemic. But in true institutional spirit, this topic includes more words about dialogue, than about accountability.  
+
+### Topics in individual accounts
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/7_prevalence_topics_ind.png")
+```
+
+Individual accounts center on women’s rights, which seems fairly obvious. It is however interesting that discourse here seems focused still on achieving equality with respect to men, which might be an initial indication of how far the debate on gender is in Colombia.  
+As with the institutional accounts, violence features very prominently, but here it is mostly connected to the state.  
+Individual accounts also comment often on wider topics of national politics and public opinion, which was perhaps to be expected, but raised our concerns about the classification of the documents our model was able to do.  
+
+### Do topics differ by occupation? 
+
+We got curious about how different occupations might affect the prevalence of these topics in each account. And since we had that information, we went ahead and made more plots: 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/7_1_plot_topic_occupations.png")
+```
+
+A couple of interesting outcomes:
+
+<ul> 
++ Artists, activists and writers tweet the most about state violence.  
++ Policy makers seem to have an opinion about everything, but mostly talk about journalism.  
++ Economist seem very concerned about gender violence. Wait, what? Told you our model wasn’t perfect.  
+
+### What is each topic about? Word-topic probabilities
+
+Then, with the help of the LDA model, we calculated the probability of each word being generated from each topic (betas) and the 'per-document-per-topic probabilities': the proportion of words from that document that are generated from each topic.  
+
+We plotted the whole thing, inspired by Julia Silge’s blog, which is awesome and which you can check out here: https://juliasilge.com/blog/evaluating-stm/   
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/5_frequent_words_ind.png")
+```
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/6_frequent_words_ins.png")
+```
+
+Some things caught our eye:  
+<ul> 
++ Although most institutional events are in Bogotá, the talk about social policy seems to be all about the territory. Centralization strikes again…  
++ Abortion is still top of the list in terms of reproductive rights for institutions, but is not so prominent in individual accounts.  
++ National politics is talked about often in relation to op-eds.  
++ Individual accounts talk about polarization, and often include words such as ‘dictatorship’, which might be indicative of that political climate.   
+
+
+## Do these topics change in time? 
+
+After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. 
+
+### Individual accounts 
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/9_topics_in_time_ind.png")
+```
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/11_topics_zoom_ind.png")
+```
+
+Some things caught our eye:
+<ul> 
+
++	The highest proportion of documents talk about women´s rights and State violence
++	Women´s right had several peaks during this period, our intuition is this trend is due to the debates in Congress about abortion and gender parity on electoral lists from July to October, and the International Day for the Elimination of Violence against Women in November.
++	State violence was a recurrent topic too, we believe it is related with the cases of police brutality occurred in September in Bogota and the National Strake held in November.
++	National politics has a peak in August, this may be related to the extradition of the ex-paramilitary Salvatore Mancuso to Colombia and the possibility of his participation in the Special Peace Jurisdiction; this event created great polarization in the public opinion 
+
+### Institutional accounts 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/10_topics_in_time_inst.png")
+```
+Some things caught our eye:  
+<ul> 
+
++	The highest proportion of documents talk about women and institutional events
++	Violence has a peak between September and October that coincides with the peak in the individual accounts regarding State violence
+
+# ![](figures/twitterbird.png) How do they relate and differ from each other?
+
+## How would they be distributed if put in a single space? 
+
+### Tweets on politics 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/12_scaling_political_ind.png")
+```
+
+### Tweets on reproductive health
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/13_plot_reproductive_scale_ins.png")
+```
+
+*What do the extremes of the scale seem to represent?*  
+
+
+## How are they connected on Twitter?
+
+
+# ![](figures/twitterbird.png) How do they feel about controversial topics?	How do they feel about the issue of trans women? 
+
+
+## How do they feel about the issue of sexual misconduct ? 
+
+
+## How do they feel about the issue of abortion ?
+
+
+## How do they feel about the issue of sexual work? 
+
+# ![](figures/twitterbird.png) Final remarks
