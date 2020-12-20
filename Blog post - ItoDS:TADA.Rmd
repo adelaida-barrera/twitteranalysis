@@ -149,7 +149,7 @@ Some things caught our eye:
 
 ## Do these topics change in time? 
 
-After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. 
+After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. We analyzed the events that occurred during this period to get a better understanding of the trends the data presents.
 
 ### Individual accounts 
 ```{r, fig.show = 'hold', echo=FALSE}
