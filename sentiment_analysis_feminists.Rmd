@@ -1,0 +1,69 @@
+---
+title: "sentiment_analysis_feminists"
+author: "Mariana Saldarriaga"
+date: "12/18/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(quanteda)
+
+# Dictionary 
+sentimiento_d <- read.delim(file = "SpanishSentimentLexicons/fullStrengthLexicon.txt",
+                          header = F,
+                          col.names = c("word", "code", "sentiment", "score2"))
+
+sentimiento_dict <- as.dictionary(sentimiento_d)
+sentimiento_dict
+
+# Dfm with dictionary by main occupation
+sentimiento_dfm <- dfm(non_congress_dfm_full,
+                       groups = c("main_occupation"), 
+                       dictionary = sentimiento_dict)
+
+sentimiento_df <- convert(sentimiento_dfm, "data.frame") %>%
+  gather(neg, pos, key = "Polarity", value = "Words")
+
+# Graph sentiment output
+sentiment_graph <- ggplot(sentimiento_df, aes(doc_id, Words, color = Polarity, group = Polarity)) +
+  geom_line(size = 1) +
+  ggtitle("Sentiment scores Gender Public Opinion Leaders on Twitter") + xlab("Main occupation") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + xlab("")
+
+sentiment_graph
+```
+
+
+```{r}
+# Sentiment analysis with improved dictionnary includinc words in topic models. 
+
+# Dictionary 
+sentimiento_d_fem <- read.delim(file = "SpanishSentimentLexicon_feminist_discourse_v3.txt",
+                          header = F,
+                          col.names = c("word", "code", "sentiment", "score 2"))
+
+sentimiento_dict_fem <- as.dictionary(sentimiento_d_fem)
+sentimiento_dict_fem
+
+# Dfm with dictionary by main occupation
+sentimiento_dfm2 <- dfm(non_congress_dfm_full,
+                       groups = c("main_occupation"), 
+                       dictionary = sentimiento_dict_fem)
+
+sentimiento_df2 <- convert(sentimiento_dfm2, "data.frame") %>%
+  gather(neg, pos, key = "Polarity", value = "Words")
+
+# Graph sentiment output
+sentiment_graph2 <- ggplot(sentimiento_df2, aes(doc_id, Words, color = Polarity, group = Polarity)) +
+  geom_line(size = 1) +
+  ggtitle("Sentiment scores Gender Public Opinion Leaders on Twitter (improved dictionary)") + xlab("Main occupation") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + xlab("")
+
+sentiment_graph2
+# Just by adding more positive words when talking about gender issues (old dictionary 456 to 504) the amount of positive words increase significantly. 
+# Dictionary we added words that are in the topic model negative and positive, althought more positive. 
+# Improve dictionaries
+# Make sense journalists use more postive words as activists policy maker, and writers. 
+```
+
