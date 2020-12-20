@@ -121,7 +121,7 @@ include_graphics("figures/7_1_plot_topic_occupations.png")
 A couple of interesting outcomes:
 
 <ul> 
-+ Artists and writers tweet the most about state violence.  
++ Artists, activists and writers tweet the most about state violence.  
 + Policy makers seem to have an opinion about everything, but mostly talk about journalism.  
 + Economist seem very concerned about gender violence. Wait, what? Told you our model wasn’t perfect.  
 
