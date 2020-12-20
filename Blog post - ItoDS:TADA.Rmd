@@ -149,6 +149,8 @@ Some things caught our eye:
 
 ## Do these topics change in time? 
 
+After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. 
+
 ### Individual accounts 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/9_topics_in_time_ind.png")
@@ -157,6 +159,14 @@ include_graphics("figures/9_topics_in_time_ind.png")
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/11_topics_zoom_ind.png")
 ```
+
+Some things caught our eye:
+<ul> 
+
++	The highest proportion of documents talk about women´s rights and State violence
++	Women´s right had several peaks during this period, our intuition is this trend is due to the debates in Congress about abortion and gender parity on electoral lists from July to October, and the International Day for the Elimination of Violence against Women in November.
++	State violence was a recurrent topic too, we believe it is related with the cases of police brutality occurred in September in Bogota and the National Strake held in November.
++	National politics has a peak in August, this may be related to the extradition of the ex-paramilitary Salvatore Mancuso to Colombia and the possibility of his participation in the Special Peace Jurisdiction; this event created great polarization in the public opinion 
 
 ### Institutional accounts 
 
