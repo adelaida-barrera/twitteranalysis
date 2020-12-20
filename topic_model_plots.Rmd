@@ -48,21 +48,6 @@ The LDA model calculates the probability of each word being generated from each 
 
 We can broadly identify what the 10 topics are for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. 
 
-Topics in individual accounts:
-
-* Topic 1: Media & equality 
-* Topic 2: Public opinion
-* Topic 3: State violence 
-* Topic 4: Human rights, women's rights
-* Topic 5: Sexual violence, gender violence 
-* Topic 6: National politics 
-* Topic 7: Journalism  
-* Topic 8: Political violence 
-* Topic 9: Everyday life & feminism
-* Topic 10: Judicial  
-
-Topics in institutional accounts: 
-
 # Most common words in each topic 
 
 ```{r}
@@ -135,7 +120,7 @@ topic_labels_i <- c("Violence",
                     "Armed conflict",
                     "Gender & diversity",
                     "Women",
-                    "Truth comission",
+                    "Truth commission",
                     "Reproductive rights")
 
 # Get tidy object 

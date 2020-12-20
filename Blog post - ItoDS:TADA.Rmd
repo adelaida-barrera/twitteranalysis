@@ -1,7 +1,4 @@
 ---
-title: "Feminism in Colombian twitter discourse"
-author: "Adelaida Barrera, Isabel de Brigard, Natalia Mejía, Mariana Saldarriaga"
-date: "19/12/2020"
 output:
  html_document:
    toc: true
@@ -83,39 +80,72 @@ include_graphics("figures/4_frequency_ins_jul_nov.png")
 With our data ready and the help of quantada, we created a corpus. Finally, *text was data*. And so we did what any text miner would do: we got our rags and buckets out, put our aprons on, and began cleaning.  
 We removed stop words (both those that come in the *tm* package, as some we compiled in our own list), punctuation, numbers, and symbols. Then we removed mentions: we were after the what is what, more than the who is who of Colombian feminist tweeter. (And we would get to connections later on, with the network analysis.) Next were hashtags. Here, again, we understood that this would limit our analysis somewhat, but we felt we had a solid theory based reason for it. So we had that going for us, which is nice. The reason is that hashtags tend to work globally, as a shortcut to the apparently borderless internet conversacion. And we felt including them might disrupt the picture of the more local discourse we were trying to paint. (Esto no creo que esté bien explicado.)  
 
-And then, we did it all over again for our institutional accounts. By this time, this project was beginning to feel a little like what we figure raising twins must be like: you do a lot of cleaning. And you do it all twice. But we have gotten this far. And we were finally ready to see what all these tweets were about.  
+And then, we did it all over again for our institutional accounts. By this time, this project was beginning to feel a little like what we figure raising twins must be like: you do a lot of cleaning. And you do it all twice. But we had gotten this far. And we were finally ready to see what all these tweets were about.  
 
 # ![](figures/twitterbird.png) What are these tweets about?
 
-## What are the most common expressions? 
+We got our dfm for individual accounts and turned it into a stm corpus to run our topic model and defined 10 topics most prevalent in the tweets we had. And yes, we then did it again for the institutional accounts. We broadly identified what the 10 topics were for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. But all in all what we got seemed reasonable.  
 
 ## What topics can we identify? 
 
-### Institutional accounts' topics 
-
-```{r, fig.show = 'hold', echo=FALSE}
-include_graphics("figures/6_frequent_words_ins.png")
-```
+### Topics in institutional accounts
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/8_prevalence_topics_ins.png")
+``` 
+
+Our chosen institutions spend a lot of time tweeting about women in the public sphere (well, duh...). They also use twitter to talk about their institutional events and work, which was also to be expected. And then it gets more interesting. Institutional accounts talk almost as much about social policy, as they talk about violence. And both the armed conflict and the truth commission figure prominently.  
+
+The model also picked up the conversation about reproductive rights that was sparked by an attempt made mid November to re-criminalize the three grounds on which abortion is currently legal in Colombia. In line with the decision of the supreme court -which upheld its 2006 verdict de-criminalizing abortions under certain circumstances-, the accounts we chose talk about abortion in terms of rights and access.  
+
+Another cluster of discourse formed around the LGBT community and the pandemic. This is probably due to the escalation of police violence against the LGBT community in their efforts to enforce curfews put in place due to the pandemic. But in true institutional spirit, this topic includes more words about dialogue, than about accountability.  
+
+### Topics in individual accounts
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/7_prevalence_topics_ind.png")
 ```
 
-### Individual accounts' topics 
+Individual accounts center on women’s rights, which seems fairly obvious. It is however interesting that discourse here seems focused still on achieving equality with respect to men, which might be an initial indication of how far the debate on gender is in Colombia.  
+As with the institutional accounts, violence features very prominently, but here it is mostly connected to the state.  
+Individual accounts also comment often on wider topics of national politics and public opinion, which was perhaps to be expected, but raised our concerns about the classification of the documents our model was able to do.  
+
+### Do topics differ by occupation? 
+
+We got curious about how different occupations might affect the prevalence of these topics in each account. And since we had that information, we went ahead and made more plots: 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/7_1_plot_topic_occupations.png")
+```
+
+A couple of interesting outcomes:
+
+<ul> 
++ Artists and writers tweet the most about state violence.  
++ Policy makers seem to have an opinion about everything, but mostly talk about journalism.  
++ Economist seem very concerned about gender violence. Wait, what? Told you our model wasn’t perfect.  
+
+### What is each topic about? Word-topic probabilities
+
+Then, with the help of the LDA model, we calculated the probability of each word being generated from each topic (betas) and the 'per-document-per-topic probabilities': the proportion of words from that document that are generated from each topic.  
+
+We plotted the whole thing, inspired by Julia Silge’s blog, which is awesome and which you can check out here: https://juliasilge.com/blog/evaluating-stm/   
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/5_frequent_words_ind.png")
 ```
 
 ```{r, fig.show = 'hold', echo=FALSE}
-include_graphics("figures/7_prevalence_topics_ind.png")
+include_graphics("figures/6_frequent_words_ins.png")
 ```
 
-## Do topics differ by occupation? 
+Some things caught our eye:  
+<ul> 
++ Although most institutional events are in Bogotá, the talk about social policy seems to be all about the territory. Centralization strikes again…  
++ Abortion is still top of the list in terms of reproductive rights for institutions, but is not so prominent in individual accounts.  
++ National politics is talked about often in relation to op-eds.  
++ Individual accounts talk about polarization, and often include words such as ‘dictatorship’, which might be indicative of that political climate.   
 
-```{r, fig.show = 'hold', echo=FALSE}
-include_graphics("figures/7_1_plot_topic_occupations.png")
-```
 
 ## Do these topics change in time? 
 
