@@ -89,3 +89,86 @@ sentiment_graph_inst2
 # Improve dictionaries
 # Make sense journalists use more postive words as activists policy maker, and writers. 
 ```
+
+# NRC dictionary
+```{r}
+library(quanteda)
+library(readtext)
+library(gridExtra)
+library(ggplot2)
+library(syuzhet)
+library(reshape2)
+
+# We get nrc dictionary (7 sentiments and also in Spanish)
+dictionary_nrc <- get_sentiment_dictionary(dictionary = 'nrc', language = "spanish")
+str(dictionary_nrc)
+
+# Clean column text from non_congress data Twitter data base
+corpus_sentim_inst <- Corpus(VectorSource(inst_jul_nov_2020$text))
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, removeWords, stopwords("spanish"))
+
+# Remove URL
+remove_url <- function(x) gsub("http[^[:space:]]*","",x)
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, content_transformer(remove_url))
+
+# Remove anything other than spanish letters and space
+remove_other <- function(x) gsub("[^[:alpha:][:space:]]*","",x)
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, content_transformer(remove_other))
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, content_transformer(removePunctuation))
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, content_transformer(tolower))
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, stripWhitespace)
+corpus_sentim_inst <- tm_map(corpus_sentim_inst, stemDocument)
+
+corpus_sentim_inst <- corpus(corpus_sentim_inst)
+docnames_corpus_sentim_inst <- docnames(corpus_sentim_inst)
+
+# For 7 sentiments
+nrc_vector_inst <- get_nrc_sentiment(corpus_sentim_inst, language = "spanish")
+str(nrc_vector2)
+
+# We estimate the "sentiment" as "positive-negative"
+nrc_vector_inst$sentiment <- nrc_vector_inst$positive-nrc_vector_inst$negative
+str(nrc_vector_inst)
+
+# let's add the name of the presidents
+nrc_vector_inst$docnames_corpus_sentim_inst <- docnames(corpus_sentim_inst)
+str(nrc_vector_inst)
+
+# First, we graph the percentage of positive and negative words relative to each other. 
+colors <- c("#E63D3D",#red 
+            "#694DE6", #purple 
+            "#196CFF", #blue
+            "#3EA3B3", #aqua
+            "#72C22B", #green
+            "#4E9435",#green
+            "#D4159F", #pink
+            "#F59824", #orange
+            "#631257", #burgundy
+            "#717174") #gre
+
+graph_prop_sentiment_ind <- barplot(
+  sort(colSums(prop.table(nrc_vector_inst[, 9:10]))), # only positive and negative
+  col = colors,
+  horiz = TRUE, 
+  cex.names = 0.7, 
+  las = 1, 
+  xlim = c(0,1),
+  main = "Percentages of positive and negative sentiment
+  in tweets institutional's accounts (nrc dictionary)", xlab="Percentage"
+  )
+
+# Percentage of emotions in the tweets relative to each other
+proportion_7_sentiment_inst <- colSums(prop.table(nrc_vector_inst[, 1:8]))
+
+# Graph percentage of emotions in the text relative to each other
+graph_prop_7_sentiment_inst <- barplot(
+  sort(colSums(prop.table(nrc_vector_inst[, 1:8]))), # other sentiments 
+  horiz = TRUE, 
+  col = colors,
+  cex.names = 0.7, 
+  las = 1,
+  main = "Percentages of emotions in tweets institutional's accounts 
+  (nrc dictionary)",
+  xlim = c(0,0.4),
+  xlab = "Percentage"
+  )
