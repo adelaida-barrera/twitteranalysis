@@ -322,6 +322,13 @@ Regarding the institution’s accounts, the trend resembles to the personal acco
 
 In contrast, with the improved dictionary the word sample increased from 1.200 to 5.000 words and the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.  
 
+Conclusions
+
++The quality of the dictionary is essential for the sentiment analysis. 
++There are more developments in this area in languages like English than Spanish, so it is important to verify the content of the dictionary or compare the results of more than one dictionary to select the best one.
++Using the improved dictionary, we can conclude that overall the personal and institutional accounts use a positive language. 
+
+
 ## How do they feel about the issue of trans women? 
 
 
