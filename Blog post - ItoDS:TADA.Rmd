@@ -409,7 +409,9 @@ Content remarks:
 
 # ![](figures/twitterbird.png) References
 
- 
+
+Baerg, N. & Lowe, W. (2020). ‘A textual taylor rule: Estimating central bank preferences combining topic and scaling methods’. Political Science Research and Methods, 8(1), 106–122.
+
 Mandelbrot, B. (1966). Information theory and psycholinguistics: A theory of word frequencies. In P. Lazarsfeld & N. Henry (Eds.), Readings in mathematical social science. MIT Press. 
 
 Roberts, M. E., Stewart, B. M., Tingley, D., Lucas, C., Leder-Luis, J., Gadarian, S. K., Albertson, B. & Rand, D. G. (2014). ‘Structural topic models for open-ended survey responses’. American Journal of Political Science, 58(4), 1064–1082. 
