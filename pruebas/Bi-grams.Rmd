@@ -54,5 +54,168 @@ bigram_occupation <- bigrams_united %>%
 bigram_occupation
 ```
 
+# Weight distribution
 
+```{r}
+# We plot the distribution of the weight distribution as a first approach
+graph_w_distr <- fem_bigram_counts %>% 
+  ggplot(mapping = aes(x = weight)) +
+    theme_light() +
+    geom_histogram() +
+    labs(title = "Bigram Weight Distribution Individual accounts")
+
+graph_w_distr
+
+# As we can see the distribution is very concentrated. We do a transformation (log):
+w_distr_log <- fem_bigram_counts %>% 
+  mutate(weight = log(weight + 1))
+
+graph_w_distr_log <- w_distr_log %>% 
+  ggplot(mapping = aes(x = weight)) +
+    theme_light() +
+    geom_histogram() +
+    labs(title = "Bigram Weight Distribution (log) Individual accounts")  
+
+graph_w_distr_log
+```
+
+# 
+
+# Node importance (pero esto es con skipgrams, no con bigrams)
+```{r}
+# Compute the centrality measures for the biggest connected component from above.
+node_imp_df <- tibble(
+  word = V(cc.network_ind)$name,  
+  degree = strength(graph = cc.network_ind),
+  closeness = closeness(graph = cc.network_ind), 
+  betweenness = betweenness(graph = cc.network_ind)
+)
+
+# Degree centrality
+deg_centrality <- node_imp_df %>%
+  arrange(- degree)
+
+# Closeness centrality
+close_centrality <- node_imp_df %>% 
+  arrange(- closeness)
+
+# Betweeness centrality
+bet_centrality <- node_imp_df %>% 
+  arrange(- betweenness) 
+
+plt.deg <- node.impo.df %>% 
+  ggplot(mapping = aes(x = degree)) +
+    theme_light() +
+    geom_histogram(fill = 'blue', alpha = 0.8, bins = 30)
+
+plt.clo <- node.impo.df %>% 
+  ggplot(mapping = aes(x = closeness)) +
+    theme_light() +
+    geom_histogram(fill = 'red', alpha = 0.8, bins = 30)
+
+plt.bet <- node.impo.df %>% 
+  ggplot(mapping = aes(x = betweenness)) +
+    theme_light() +
+    geom_histogram(fill = 'green4', alpha = 0.8, bins = 30)
+
+plot_grid(
+  ... = plt.deg, 
+  plt.clo, 
+  plt.bet, 
+  ncol = 1, 
+  align = 'v'
+)
+```
+
+
+
+# Correlation Analysis
+
+# In this section, we analyse the probability that the pair of words appear, or not and if one appears without the other. We use the phi coefficient.
+```{r}
+# First: words data frame
+fem_words <- feminists$text %>%
+  unnest_tokens(input = Text, output = word) %>% 
+  anti_join(y = stopwords.df, by = 'word')
+
+# Correlation words
+corr_words_ind <- fem_words %>% 
+  group_by(word) %>% 
+  pairwise_cor(item = word, feature = text) 
+
+# Let us visualize the correlation of important nodes in the network
+words_nodes_ind <- c('trans')
+
+# We set the correlation threshold 
+threshold3 = 0.5
+
+network_corr_ind <- corr_words_ind %>%
+  rename(weight = correlation) %>% 
+  filter((item1 %in% words_nodes_ind | item2 %in% words_nodes_ind)) %>% 
+  filter(weight > threshold3) %>%
+  # filter for relevant nodes
+  graph_from_data_frame()
+  
+V(network_corr_ind)$degree <- strength(graph = network_corr_ind)
+
+E(network_corr_ind)$width <- E(network_corr_ind)$weight/max(E(network_corr_ind)$weight)
+
+graph_clusters_corr_ind <- plot(network_corr_ind, 
+  vertex.color = 'lightblue',
+  vertex.size = 10*V(network_corr_ind)$degree,
+  vertex.label.color = 'black', 
+  vertex.label.cex = 0.6, 
+  vertex.label.dist = 1.6,
+  edge.color = 'gray', 
+  edge.width = 3*E(network_corr_ind)$width ,
+  main = 'Bigram Count Network (Biggest Connected Component)
+  Individual Accounts', 
+  sub = glue('Weight Threshold: {threshold}'), 
+  alpha = 50)
+
+graph_clusters_corr_ind
+
+# The correlation analysis shows that our clusters well ok. 
+```
+
+```{r}
+# Here, we select feature comparisons for just “violencia” and “acoso”, and convert this into a matrix. Because correlations are sensitive to document length, we first convert this into a relative frequency using dfm_weight().
+
+non_congress_dfm_weight <- dfm_weight(non_congress_dfm_full, scheme = "prop")
+non_congress_dfm_matrix <- textstat_simil(non_congress_dfm_weight,
+                                          selection = ("violencia","acoso"),
+                                          method = "correlation",
+                                          margin = "features")
+
+dfm_weight(non_congress_dfm, scheme = "prop") %>% 
+    textstat_simil(selection = c("violencia", "acoso"), method = "correlation", margin = "features") %>%
+    as.matrix() %>%
+    head(2)
+  
+```
+
+```{r}
+# More analysis cluster!
+
+# Now we encode the membership as a node atribute 
+V(cc.network_ind)$membership <- membership(comm_detection_ind)
+
+# We collect the words per cluster (top frequent bigrams)
+clusters_df <- tibble(
+  word = V(cc.network_ind) %>% names(),
+  cluster = V(cc.network_ind)$membership
+)
+
+V(cc.network_ind)$membership %>%
+  unique %>% 
+  sort %>% 
+  map_chr(.f = function(cluster.id) {
+    
+    clusters_df %>% 
+      filter(cluster == cluster.id) %>% 
+      pull(word) %>% 
+      str_c(collapse = ', ')
+    
+  })
+```
 
