@@ -295,7 +295,7 @@ The institutional accounts scale discussing reproductive rights topics show us a
 
 # ![](figures/twitterbird.png) How do they feel?
 
-After understanding how the accounts are positioned in space and how they relate with each other, we want to see how positive or negative is the vocabulary they use. To achieve this, we performed a sentiment analysis, there are different ways to do it, for instance, scaling models, classification models or dictionary models; we chose the last option! 
+After understanding how the accounts are positioned in space and how they relate to each other, we want to see how positive or negative is the vocabulary they use. To achieve this, we performed a sentiment analysis, there are different ways to do it, for instance, scaling models, classification models or dictionary models; we chose the last option! 
 
 We began by looking for a dictionary to analyze our data, it was quite a challenge, we must say, to find a good quality dictionary in Spanish. We, finally, picked the Full-Strength Lexicon dictionary (Perez, V., et al, 2012). 
 
