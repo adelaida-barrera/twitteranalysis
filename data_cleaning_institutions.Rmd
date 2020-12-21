@@ -25,7 +25,7 @@ load("data/tweets_institutions.RData")
 institutions %>% group_by(screen_name) %>% summarise(n = n()) %>% summarise(avg_tweets = mean(n))
 
 # Less recent tweet by account 
-institutions %>% group_by(screen_name) %>% summarize(min = min(created_at)) %>% arrange(desc(min))
+institutions %>% group_by(screen_name) %>% summarise(min = min(created_at)) %>% arrange(desc(min))
 
 # Create a varaible with day of publishing
 institutions <- institutions %>% 
@@ -35,7 +35,7 @@ institutions <- institutions %>%
 # Frequency of tweets across time: too skewed due to some accounts tweeting too little
 frequency_inst_all <- institutions %>% 
   group_by(day_published) %>% 
-  summarize(tweets_per_day = n()) %>% 
+  summarise(tweets_per_day = n()) %>% 
     ggplot(aes(x = day_published,
                y = tweets_per_day)) +
     geom_line(color = "#F59824")+
@@ -50,7 +50,7 @@ inst_jul_nov_2020 <- institutions %>% filter(day_published >= "2020-07-01")
 # Frequency of tweets per day from July 2020 to November 2020: more balanced
 frequency_inst_trimmed <- inst_jul_nov_2020 %>% 
    group_by(day_published) %>% 
-  summarize(tweets_per_day = n()) %>% 
+  summarise(tweets_per_day = n()) %>% 
     ggplot(aes(x = day_published,
                y = tweets_per_day)) +
     geom_line(color = "#F59824")+
