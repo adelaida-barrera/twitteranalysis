@@ -311,13 +311,17 @@ include_graphics("figures/23_sentiment_newdict_individuals.png")
 ```
 The sentiment score for individual accounts show that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative scale.
 
-With the improved dictionary we observe a higher difference in the polarity, the accounts use more positive words. The occupations with highest score continue to be activists, journalists, and writers. The highest changed between the positive and negative score is in the journalists. We can infer that the sentiment towards the new words added to the dictionary was mainly positive and that increased the positive score.
+With the improved dictionary we captured a higher sample of words, the accounts use significantly more positive and negative words, and a higher difference in the polarity, between positive and negative scores. 
+
+The positive words increased from 7.000 to around 30.000 words, and the negative from 7.000 to around 13.000, we can infer that the sentiment towards the new words, added to the dictionary, was mainly positive. Moreover, the occupations with highest score continued to be activists, journalists, and writers, and the highest changed between the positive and negative score is in the journalists.
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/24_sentiment_olddict_institutions.png")
 include_graphics("figures/25_sentiment_newdict_institutions.png")
 ```
+Regarding the institution’s accounts, the trend resembles to the personal accounts, in the first graph there is not much difference between the negative and positive score. The accounts that use the highest amount of positive and negative words are Legal Abortion Colombia, the Truth Commission, the Women´s Secretary. 
 
+In contrast, with the improved dictionary the word sample increased from 1.200 to 5.000 words and the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.
 
 ## How do they feel about the issue of trans women? 
 
