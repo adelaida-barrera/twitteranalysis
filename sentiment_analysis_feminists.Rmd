@@ -28,7 +28,11 @@ sentimiento_df <- convert(sentimiento_dfm, "data.frame") %>%
 # Graph sentiment output
 sentiment_graph <- ggplot(sentimiento_df, aes(doc_id, Words, color = Polarity, group = Polarity)) +
   geom_line(size = 1) +
-  ggtitle("Sentiment scores Gender Public Opinion Leaders on Twitter") + xlab("Main occupation") +
+  ggtitle("Sentiment scores Gender Public Opinion Leaders on Twitter 
+          (spanish sentiment dictionary online)") +
+  xlab("Main occupation") +
+  scale_color_manual(values = colors) +
+  theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + xlab("")
 
 sentiment_graph
@@ -57,8 +61,12 @@ sentimiento_df2 <- convert(sentimiento_dfm2, "data.frame") %>%
 # Graph sentiment output
 sentiment_graph2 <- ggplot(sentimiento_df2, aes(doc_id, Words, color = Polarity, group = Polarity)) +
   geom_line(size = 1) +
-  ggtitle("Sentiment scores Gender Public Opinion Leaders on Twitter (improved dictionary)") + xlab("Main occupation") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + xlab("")
+  ggtitle("Sentiment scores Gender Public Opinion Leaders on Twitter 
+          (improved dictionary)") +
+  xlab("Main occupation") +
+  scale_color_manual(values = colors) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 sentiment_graph2
 # Just by adding more positive words when talking about gender issues (old dictionary 456 to 504) the amount of positive words increase significantly. 
@@ -79,7 +87,8 @@ sentimiento_dict_fem <- as.dictionary(sentimiento_d_fem)
 sentimiento_dict_fem
 
 # Dfm with dictionary by main occupation
-sentimiento_dfm2 <- dfm(non_congress_dfm_full,
+sentimiento_dfm2 <- dfm(non_congress_corp,
+                        group
                        dictionary = sentimiento_dict_fem)
 
 sentimiento_df2 <- convert(sentimiento_dfm2, "data.frame") %>%

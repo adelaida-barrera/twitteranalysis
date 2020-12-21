@@ -283,7 +283,20 @@ The institutional accounts scale discussing reproductive rights topics show us a
 ## How are they connected on Twitter?
 
 
-# ![](figures/twitterbird.png) How do they feel about controversial topics?	How do they feel about the issue of trans women? 
+# ![](figures/twitterbird.png) How do they feel about controversial topics?
+
+```{r}
+include_graphics("figures/22_sentiment_olddict_individuals.png")
+include_graphics("figures/23_sentiment_newdict_individuals.png")
+```
+
+```{r}
+include_graphics("figures/24_sentiment_olddict_institutions.png")
+include_graphics("figures/25_sentiment_newdict_institutions.png")
+```
+
+
+## How do they feel about the issue of trans women? 
 
 
 ## How do they feel about the issue of sexual misconduct ? 
