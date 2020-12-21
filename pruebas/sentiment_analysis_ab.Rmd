@@ -1,0 +1,245 @@
+---
+title: "Sentiment_analysis"
+author: "Natalia Mejia"
+date: "17/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(tidytext)
+library(tm)
+library(lubridate)
+library(zoo)
+library(scales)
+library(twitteR)
+library(rtweet)
+library(dplyr)
+```
+
+```{r}
+#Define a theme for visualization of the data
+
+tema_graf <-
+  theme_minimal() +
+  theme(text = element_text(family = "serif"),
+        panel.grid.minor = element_blank(),
+        strip.background = element_rect(fill = "#EBEBEB", colour = NA),
+        legend.position = "none",
+        legend.box.background = element_rect(fill = "#EBEBEB", colour = NA))
+
+```
+
+```{r}
+#Getting tweets
+
+load("data/non_congress_fem_jul_nov_2020.RData")
+sentimiento <- read.delim("fullStrengthLexicon.txt", 
+                          header = F,
+                          col.names = c("word", "code", "score", "score2")) 
+
+sentimiento <- sentimiento %>% select(word, score)  
+```
+
+```{r}
+
+
+```
+
+
+```{r}
+#Getting Affin dictionary
+
+```
+
+```{r}
+#Converting each tweet in words to assign each word a score based on the sentiment analysis
+
+tweet_afinn <- 
+  tweets %>%
+  unnest_tokens(input = "text", output = "Word") %>%
+  inner_join(afinn, ., by = "Word") %>%
+  mutate(Type = ifelse(Puntuacion > 0, "Positive", "Negative")) %>% 
+  rename("Person" = screen_name) %>%
+   filter(Palabra != "no", Palabra != "ha")
+
+tweet_afinn
+
+```
+
+```{r}
+#Getting a score per tweet
+
+score_tweet <-
+  tweet_afinn %>%
+  group_by(text_id) %>%
+  summarise(Puntuacion_tuit = mean(Puntuacion)) %>%
+  left_join(tweets, by = "text_id") 
+
+
+score_tweet_clean <- score_tweet %>% 
+  select(user_id,
+         name,
+         main_occupation,
+         text,
+         text_id,
+         Score_tweet)
+
+#Group by main occupation
+
+score_occupation <- 
+  score_tweet_clean %>%
+  group_by(main_occupation) %>%
+  summarise(Score_tweet = mean(Score_tweet))
+
+```
+```{r}
+#Getting positive and negative words from each main occupation
+
+map(c("Positive", "Negative"), function(sentimient) {
+  tweet_afinn %>%
+    filter(Type ==  sentimient) %>%
+    group_by(main_occupation) %>%
+    count(Word, sort = T) %>%
+    top_n(n = 5, wt = n) %>%
+    ggplot() +
+    aes(Word, n, fill = main_occupation) +
+    geom_col() +
+    facet_wrap("main_occupation", scales = "free") +
+    scale_y_continuous(expand = c(0, 0)) +
+    coord_flip() +
+    labs(title = sentimient) +
+    tema_graf
+})
+
+
+```
+```{r}
+#Counts of words per main occupation
+
+score_tweet_clean %>%
+  count(main_occupation)
+
+```
+```{r}
+#Comparing positive and negative sentiment
+
+ tweet_afinn %>%
+  count(main_occupation, Type) %>%
+  group_by(main_occupation) %>%
+  mutate(Proportion = n / sum(n)) %>%
+  ggplot() +
+  aes(main_occupation, Proportion, fill = Type) +
+  geom_col() +
+  scale_y_continuous(labels = percent_format()) +
+  tema_graf +
+  theme(legend.position = "top")
+
+
+```
+```{r}
+
+tweets %>%
+  ggplot() +
+  aes(Score_tweet, color = main_occupation) +
+  geom_density() +
+  facet_wrap(~main_occupation) +
+  tema_graf
+
+
+```
+```{r}
+#Class´approach
+
+library(quanteda)
+library(quanteda.textmodels)
+library(glmnet)
+library(caret) #generic ML library
+library(plotROC)
+
+```
+
+
+```{r}
+#Getting data
+
+#Creating corpus
+non_congress_corp <- corpus(x = non_congress)
+
+#Creating dfm
+non_congress_dfm_full <- non_congress_dfm
+
+trans_dfm <- 
+  
+```
+
+
+
+```{r}
+#Function that gets the sentiment
+
+res <- textstat_polarity(non_congress_dfm_full,
+                         data_dictionary_LSD2015)
+
+res$sent_prob <- 1/(1 + exp(-res$sentiment))
+
+#Random collection of 1500
+
+set.seed(800)
+id_train <- sample(1:2000, 1500)
+head(id_train, 10)
+
+```
+
+```{r}
+#Add numeric id to pick out the right ones
+
+non_congress_corp$id_numeric <- 1:ndoc(non_congress_corp)
+
+```
+
+
+```{r}
+# Train
+
+#Subset those in the training (the id ones)
+
+train_corp <- corpus_subset(non_congress_corp,
+                                id_numeric %in% id_train)
+
+dfmat_training <- dfm(train_corp,
+                   remove = stopwords("es"),
+                   remove_number = TRUE,
+                   stem = TRUE)
+
+```
+
+```{r}
+# test
+
+test_corp <- corpus_subset(non_congress_corp, !id_numeric %in% id_train)
+
+dfmat_test <- dfm(test_corp,
+                  remove = stopwords("es"),
+                  remove_number = TRUE,
+                  stem = TRUE)
+
+yval <- as.integer(dfmat_training$sentiment == "pos")
+
+
+```
+
+```{r}
+#Cross validate the model
+
+lasso <- cv.glmnet(x = dfmat_training,
+                   y = dfmat_training$sentiment, #colum pos neg
+                   alpha = 1, # 0 (ridge) to 1 (lasso)
+                   nfold = 5,
+                   family = "binomial")
+
+
+
+
+```
+
