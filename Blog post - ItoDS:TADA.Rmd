@@ -15,6 +15,7 @@ On the basis of tweets gathered from individual and institutional accounts, we o
 ## The team 
 
 Although all of us contributed to every aspect of the project, from the initial idea to the n-th revision of the markdown, each one took the lead on certain sections:  
+<br>
 
 Adelaida Barrera (adelaidabarrera@gmail.com)
 
