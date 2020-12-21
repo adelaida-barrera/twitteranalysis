@@ -405,7 +405,7 @@ Content remarks:
 
 +In the scaling exercise we observed that the personal accounts use similar vocabulary when they discuss political topics, and the institutional accounts positioned in three different groups depending on the variety of topics discussed beyond reproductive health topics. 
 
-+In the sentiment analysis showed a positive use of vocabulary. A highlight is the higher use of positive language of writers, journalists, and activists. 
++The sentiment analysis showed a positive use of vocabulary from the personal and institutional accounts. A highlight is the higher use of positive language of writers, journalists, and activists. 
 
 # ![](figures/twitterbird.png) References
 
