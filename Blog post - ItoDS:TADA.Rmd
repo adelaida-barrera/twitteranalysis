@@ -309,7 +309,7 @@ Lets see what we got:
 include_graphics("figures/22_sentiment_olddict_individuals.png")
 include_graphics("figures/23_sentiment_newdict_individuals.png")
 ```
-The sentiment score for individual accounts show that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative scale.
+The sentiment score for individual accounts shows that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative scale.
 
 With the improved dictionary we captured a higher sample of words, the accounts use significantly more positive and negative words, and a higher difference in the polarity, between positive and negative scores. 
 
