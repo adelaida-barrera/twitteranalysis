@@ -119,7 +119,7 @@ In practical terms, we ran this STM by turning our ‘dfm’ (matrix of counts o
 
 Before modeling, we wanted to observe the data structures to look for text relations. Following certain techniques found online, like the one employed by Orduz (2018), we [performed](https://github.com/adelaida-barrera/twitteranalysis/blob/main/network_analysis_individuals.Rmd) a network analysis. This will allow us to understand graphically the tweets' text as a weighted network. 
 
-As a first exploration, we saw the pairwise relative occurrence of words. We did a bi-gram analysis for individuals and institutional accounts. 
+As a first exploration, we saw the pairwise relative occurrence of words, also known as bi-grams.
 We created the bi-grams and did the respective cleaning of them (remove stopwords, https, emoticons, pairs of words not relevant, etc.). Afterwards, we defined a weighted network from the bi-gram count and got our first graphs (for individual and institutional accounts):
 
 - Each word is going to represent a node.
@@ -343,58 +343,40 @@ include_graphics("figures/13_plot_reproductive_scale_ins.png")
 The institutional accounts scale discussing reproductive rights topics show us an interesting account grouping. The accounts close to 0 and the positive quadrant are institutions that advocate for women´s rights: Women_ Equity, Women Commission Colombia, Women Secretary and ONU Women, so these accounts mainly use vocabulary related to women and their reproductive rights. In the middle, between -2 and 0, the spectrum opens more, and we can find activists twitter accounts, these accounts are close to each other which means they use similar vocabulary and discuss similar topics, for instance, regarding abortion and the LGBT community. The last group is the Constitutional Court and the Truth Commission, we believe they are the extreme left because they use a different language compared to the other institutions or activists accounts, and they discuss a variety of topics regarding reproductive rights beyond women.  
 
 
-## How are they connected on Twitter?
-
-
 # ![](figures/twitterbird.png) How do they feel?
 
-After understanding how the accounts are positioned in space and how they relate to each other, we want to see how positive or negative is the vocabulary they use. To achieve this, we performed a sentiment analysis, there are different ways to do it, for instance, scaling models, classification models or dictionary models; we chose the last option! 
+Previously, we explore how the accounts are positioned in space and how they relate to each other. Now we want to see how positive or negative is the vocabulary they use. To achieve this, we performed a sentiment analysis. There are different ways to do it, for instance, scaling models, classification models or dictionary models; we chose the last option! 
 
-We began by looking for a dictionary to analyze our data, it was quite a challenge, we must say, to find a good quality dictionary in Spanish. We, finally, picked the Full-Strength Lexicon dictionary (Perez, V., et al, 2012). 
+We began by looking for a dictionary to analyze our data. It was a challenge to find a good quality dictionary in Spanish. We choosed the Full-Strength Lexicon dictionary (Perez, V., et al, 2012) to perfom our sentimental analysis. 
 
-Using quanteda, we applied this dictionary to our corpus to both the personal and institutional accounts. As the personal accounts contained too many documents, we grouped them by main occupation; we didn´t have this issue with the institutional accounts which were analyzed individually.   
-Exploring the results with the first dictionary we didn´t see a significant difference between the positive and negative score. So, we decided to perform a qualitative analysis of the dictionary, we found that the most frequent words used by the accounts in each topic (information gathered in the topic model section) were not included in the dictionary we selected. Thus, the words were included in the dictionary to improve the analysis. The results after running again the sentiment analysis improved.  
+Using quanteda, we applied this dictionary to our corpus to both the personal and institutional accounts. As the personal accounts contained too many documents, we grouped them by main occupation; we didn't have this issue with the institutional accounts which were analyzed individually.   
 
-Lets see what we got:  
+The results -with the Full-Strength Lexicon- don't show a big difference between the count of the positive and the negative words used in the individual's and institution's twitter conversations. 
+
+As a second stage, we decided to perform a qualitative analysis of the dictionary. We found that most of the frequent words used by the accounts in each topic (information gathered in the topic model section) were not included in the dictionary we selected. As a fact the Spanish Full-Strength Lexicon- doesn't have a big set of words. Thus, we included the most frequent words in the dictionary. We did a qualitative assesment of the words' sentiments in gender discourse to improve the analysis. As expected, the sample of words increased and the interpretable results after running again the sentiment analysis improved.  
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/22_sentiment_olddict_individuals.png")
 include_graphics("figures/23_sentiment_newdict_individuals.png")
 ```
 
-The sentiment score for individual accounts shows that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative scale.  
+The sentiment score for individual accounts shows that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative sentiment scale.  
 
-With the improved dictionary we captured a higher sample of words, the accounts use significantly more positive and negative words, and a higher difference in the polarity, between positive and negative scores.   
-
-The positive words increased from 7.000 to around 30.000 words, and the negative from 7.000 to around 13.000, we can infer that the sentiment towards the new words, added to the dictionary, was mainly positive. Moreover, the occupations with highest score continued to be activists, journalists, and writers, and the highest changed between the positive and negative score is in the journalists.  
+The positive words increased from 7.000 to around 30.000 words, and the negative from 7.000 to around 13.000. We can infer that using the improved dictionary, was mainly positive to analyse sentiments in our research interest -"gender conversation" in Twitter-Colombia. Moreover, the occupations with highest count of positive wordss continued to be activists, journalists, and writers. The highest changed between the positive and negative score is in the journalists.
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/24_sentiment_olddict_institutions.png")
 include_graphics("figures/25_sentiment_newdict_institutions.png")
 ```
-Regarding the institution’s accounts, the trend resembles to the personal accounts, in the first graph there is not much difference between the negative and positive score. The accounts that use the highest amount of positive and negative words are Legal Abortion Colombia, the Truth Commission, the Women´s Secretary.   
 
-In contrast, with the improved dictionary the word sample increased from 1.200 to 5.000 words and the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.  
+The institution's accounts that use the highest amount of positive and negative words are Legal Abortion Colombia, the Truth Commission, and the Women´s Secretary.   
 
-Conclusions
-
-+The quality of the dictionary is essential for the sentiment analysis. 
-+There are more developments in this area in languages like English than Spanish, so it is important to verify the content of the dictionary or compare the results of more than one dictionary to select the best one.
-+Using the improved dictionary, we can conclude that overall the personal and institutional accounts use a positive language. 
-
-
-## How do they feel about the issue of trans women? 
-
-
-## How do they feel about the issue of sexual misconduct ? 
-
-
-## How do they feel about the issue of abortion ?
-
-
-## How do they feel about the issue of sexual work? 
+The improved dictionary increased the sample from 1.200 to 5.000 words. Also, the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.  
 
 # ![](figures/twitterbird.png) Final remarks
+
+- The quality of the dictionary is essential for the sentiment analysis. 
+- There are more developments in this area in languages like English than Spanish, so it is important to verify the content of the dictionary or compare the results of more than one dictionary to select the best one.
 
 # ![](figures/twitterbird.png) References
 
