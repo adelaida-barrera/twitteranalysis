@@ -22,7 +22,7 @@ library(knitr)
 ```{r}
 
 # load subset of tweets and full dfm
-load("data/ind_tweets_on_rephealth")
+load("data/ins_tweets_on_rephealth.RData")
 load("data/full_institutions_dfm.Rdata")
 
 manifestos <- distinct(tweets_on_rephealth) %>% group_by(screen_name) %>%
