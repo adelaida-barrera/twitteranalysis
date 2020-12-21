@@ -75,8 +75,8 @@ dim(fem_jul_nov_2020)
 #descriptives_ind <- plot_grid(frequency_ind_all, frequency_ind_trimmed)
 #ggsave(descriptives_ind, file = "pruebas/desc.png", width = 8, height = 4)
 
-ggsave(frequency_ind_all, file = "figures/1_frequency_ind_all_time.png", height = 3, width = 5)
-ggsave(frequency_ind_trimmed, file = "figures/2_frequency_ind_jul_nov.png", height = 3, width = 5)
+#ggsave(frequency_ind_all, file = "figures/1_frequency_ind_all_time.png", height = 3, width = 5)
+#ggsave(frequency_ind_trimmed, file = "figures/2_frequency_ind_jul_nov.png", height = 3, width = 5)
 
 ```
 
@@ -94,7 +94,7 @@ non_congress <- non_congress %>%
          text_id = paste(screen_name, id,
                          sep = "_"))
 
-save(non_congress, file = "data/non_congress_fem_jul_nov_2020.RData")
+#save(non_congress, file = "data/non_congress_fem_jul_nov_2020.RData")
 ```
 
 #Clean data and create sample for topic model of feminist accounts
@@ -156,7 +156,7 @@ docnames(non_congress_dfm) <- non_congress$text_id
 
 non_congress_dfm_full <- non_congress_dfm
 
-save(non_congress_dfm_full, file = "data/non_congress_dfm_full")
+#save(non_congress_dfm_full, file = "data/non_congress_dfm_full")
 
 ```
 
