@@ -231,7 +231,7 @@ Some things caught our eye:
 
 ## Do these topics change in time? 
 
-After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. We analyzed the events that occurred during this period to get a better understanding of the trends the data presents.
+After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. We analyzed the events that occurred during this period to get a better understanding of the trends the data presents.  
 
 ### Individual accounts 
 ```{r, fig.show = 'hold', echo=FALSE}
@@ -244,10 +244,10 @@ include_graphics("figures/11_topics_zoom_ind.png")
 
 Some things caught our eye:
 
--	The highest proportion of documents talk about women´s rights and State violence
--	Women´s right had several peaks during this period, our intuition is this trend is due to the debates in Congress about abortion and gender parity on electoral lists from July to October, and the International Day for the Elimination of Violence against Women in November.
--	State violence was a recurrent topic too, we believe it is related with the cases of police brutality occurred in September in Bogota and the National Strake held in November.
--	National politics has a peak in August, this may be related to the extradition of the ex-paramilitary Salvatore Mancuso to Colombia and the possibility of his participation in the Special Peace Jurisdiction; this event created great polarization in the public opinion 
+-	The highest proportion of documents talk about women´s rights and State violence.  
+-	Women´s right had several peaks during this period, our intuition is this trend is due to the debates in Congress about abortion and gender parity on electoral lists from July to October, and the International Day for the Elimination of Violence against Women in November.  
+-	State violence was a recurrent topic too, we believe it is related with the cases of police brutality occurred in September in Bogota and the National Strake held in November.  
+-	National politics has a peak in August, this may be related to the extradition of the ex-paramilitary Salvatore Mancuso to Colombia and the possibility of his participation in the Special Peace Jurisdiction; this event created great polarization in the public opinion.  
 
 ### Institutional accounts 
 
@@ -256,14 +256,14 @@ include_graphics("figures/10_topics_in_time_inst.png")
 ```
 Some things caught our eye:  
 
--	The highest proportion of documents talk about women and institutional events
--	Violence has a peak between September and October that coincides with the peak in the individual accounts regarding State violence
+-	The highest proportion of documents talk about women and institutional events  
+-	Violence has a peak between September and October that coincides with the peak in the individual accounts regarding State violence  
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics. 
+Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics.   
 
-It is important to mention that inside our selected categories (political topics and reproductive health) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one topic. This is why, we believe the topic model has some limitations with twitter data and more manual classification is needed to improve precision. 
+It is important to mention that inside our selected categories (political topics and reproductive health) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one topic. This is why, we believe the topic model has some limitations with twitter data and more manual classification is needed to improve precision.  
 
 
 ## How would they be distributed if put in a single space? 
@@ -298,29 +298,29 @@ After understanding how the accounts are positioned in space and how they relate
 
 We began by looking for a dictionary to analyze our data, it was quite a challenge, we must say, to find a good quality dictionary in Spanish. We, finally, picked the Full-Strength Lexicon dictionary (Perez, V., et al, 2012). 
 
-Using quanteda, we applied this dictionary to our corpus to both the personal and institutional accounts. As the personal accounts contained too many documents, we grouped them by main occupation; we didn´t have this issue with the institutional accounts which were analyzed individually. 
-Exploring the results with the first dictionary we didn´t see a significant difference between the positive and negative score. So, we decided to perform a qualitative analysis of the dictionary, we found that the most frequent words used by the accounts in each topic (information gathered in the topic model section) were not included in the dictionary we selected. Thus, the words were included in the dictionary to improve the analysis. The results after running again the sentiment analysis improved.
+Using quanteda, we applied this dictionary to our corpus to both the personal and institutional accounts. As the personal accounts contained too many documents, we grouped them by main occupation; we didn´t have this issue with the institutional accounts which were analyzed individually.   
+Exploring the results with the first dictionary we didn´t see a significant difference between the positive and negative score. So, we decided to perform a qualitative analysis of the dictionary, we found that the most frequent words used by the accounts in each topic (information gathered in the topic model section) were not included in the dictionary we selected. Thus, the words were included in the dictionary to improve the analysis. The results after running again the sentiment analysis improved.  
 
-Lets see what we got: 
-
+Lets see what we got:  
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/22_sentiment_olddict_individuals.png")
 include_graphics("figures/23_sentiment_newdict_individuals.png")
 ```
-The sentiment score for individual accounts shows that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative scale.
 
-With the improved dictionary we captured a higher sample of words, the accounts use significantly more positive and negative words, and a higher difference in the polarity, between positive and negative scores. 
+The sentiment score for individual accounts shows that activists, journalists, and writers are the occupations that use a higher amount of positive and negative words in their vocabulary, in contrast with other occupations. Journalists have the highest number of words, this make sense as the main task of this occupation is to communicate and inform society about different topics, so their vocabulary uses a high number of words that can be classified in a positive-negative scale.  
 
-The positive words increased from 7.000 to around 30.000 words, and the negative from 7.000 to around 13.000, we can infer that the sentiment towards the new words, added to the dictionary, was mainly positive. Moreover, the occupations with highest score continued to be activists, journalists, and writers, and the highest changed between the positive and negative score is in the journalists.
+With the improved dictionary we captured a higher sample of words, the accounts use significantly more positive and negative words, and a higher difference in the polarity, between positive and negative scores.   
+
+The positive words increased from 7.000 to around 30.000 words, and the negative from 7.000 to around 13.000, we can infer that the sentiment towards the new words, added to the dictionary, was mainly positive. Moreover, the occupations with highest score continued to be activists, journalists, and writers, and the highest changed between the positive and negative score is in the journalists.  
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/24_sentiment_olddict_institutions.png")
 include_graphics("figures/25_sentiment_newdict_institutions.png")
 ```
-Regarding the institution’s accounts, the trend resembles to the personal accounts, in the first graph there is not much difference between the negative and positive score. The accounts that use the highest amount of positive and negative words are Legal Abortion Colombia, the Truth Commission, the Women´s Secretary. 
+Regarding the institution’s accounts, the trend resembles to the personal accounts, in the first graph there is not much difference between the negative and positive score. The accounts that use the highest amount of positive and negative words are Legal Abortion Colombia, the Truth Commission, the Women´s Secretary.   
 
-In contrast, with the improved dictionary the word sample increased from 1.200 to 5.000 words and the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.
+In contrast, with the improved dictionary the word sample increased from 1.200 to 5.000 words and the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.  
 
 ## How do they feel about the issue of trans women? 
 
@@ -337,8 +337,8 @@ In contrast, with the improved dictionary the word sample increased from 1.200 t
 
 # ![](figures/twitterbird.png) References
 
-https://juanitorduz.github.io/text-mining-networks-and-visualization-plebiscito-tweets/
+https://juanitorduz.github.io/text-mining-networks-and-visualization-plebiscito-tweets/  
 
-https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/#:~:text=The%20Louvain%20method%20for%20community,for%20detecting%20communities%20in%20networks.&text=The%20Louvain%20algorithm%20is%20a,clustering%20on%20the%20condensed%20graphs.
+https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/#:~:text=The%20Louvain%20method%20for%20community,for%20detecting%20communities%20in%20networks.&text=The%20Louvain%20algorithm%20is%20a,clustering%20on%20the%20condensed%20graphs  
 
 
