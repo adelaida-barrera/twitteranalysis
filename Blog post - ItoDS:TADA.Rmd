@@ -294,13 +294,17 @@ include_graphics("figures/10_topics_in_time_inst.png")
 Some things caught our eye:  
 
 -	The highest proportion of documents talk about women and institutional events  
+
 -	Violence has a peak between September and October that coincides with the peak in the individual accounts regarding State violence  
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics.   
+Now we move to positions! Similar to a topic model but with only two topics, tried to see how would these tweets be distributed if we placed them in a single shared space. Who would be closer to who in the way they talk. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular 
+**position** about something. So we tried to create a scale based on the tweets discussing specific topics about which we could hypothesize these womens would be expressing a position when tweeting about them. 
 
-It is important to mention that inside our selected categories (political topics and reproductive health) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one topic. This is why, we believe the topic model has some limitations with twitter data and more manual classification is needed to improve precision.  
+The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics.   
+
+It is important to mention that inside our selected categories (political topics and reproductive rights) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one "real", clearly interpretable, topic. This is why, we believe the topic model has some limitations with Twitter data and more manual classification might be needed to improve precision.  
 
 
 ## How would they be distributed if put in a single space? 
@@ -363,8 +367,13 @@ The improved dictionary increased the sample from 1.200 to 5.000 words. Also, th
 
 # ![](figures/twitterbird.png) References
 
+ 
+Mandelbrot, B. (1966). Information theory and psycholinguistics: A theory of word frequencies. In P. Lazarsfeld & N. Henry (Eds.), Readings in mathematical social science. MIT Press. 
+
+Roberts, M. E., Stewart, B. M., Tingley, D., Lucas, C., Leder-Luis, J., Gadarian, S. K., Albertson, B. & Rand, D. G. (2014). ‘Structural topic models for open-ended survey responses’. American Journal of Political Science, 58(4), 1064–1082. 
+
+Zipf, G. K. (1932). ‘Selected studies of the principle of relative frequency in language’. Oxford University Press. 
+
 https://juanitorduz.github.io/text-mining-networks-and-visualization-plebiscito-tweets/  
 
-https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/#:~:text=The%20Louvain%20method%20for%20community,for%20detecting%20communities%20in%20networks.&text=The%20Louvain%20algorithm%20is%20a,clustering%20on%20the%20condensed%20graphs  
-
-
+https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/#:~:text=The%20Louvain%20method%20for%20community,for%20detecting%20communities%20in%20networks.&text=The%20Louvain%20algorithm%20is%20a,clustering%20on%20the%20condensed%20graphs 
