@@ -7,11 +7,24 @@ output:
 ---
 
 ![](figures/Title.png)  
+
+# ![](figures/twitterbird.png) Our project in a nutshell   
+
+On the basis of tweets gathered from individual and institutional accounts, we offer here a mostly descriptive exploration of the public discourse around feminism and gender issues in the Colombian context. After some remarks about the selection of the sample, we identify the most relevant topics in our data with bi-grams and topic modelling. We then explore connections between the accounts and relative positions on some topics, with scaling and network analysis. Finally, with sentiment analysis, we explore how these tweeters feel about certain controversial topics.  
+
+## The team 
+
+Although all of us contributed to every aspect of the project, from the initial idea to the n-th revision of the markdown, each one took the lead on certain sections:  
+
+Adelaida Barrera (adelaidabarrera@gmail.com)
+
+Natalia Mejía (natimp555@gmail.com)
+
+Mariana Saldarriaga (m.saldarriaga15@gmail.com)
+
+Isabel de Brigard (isabeldebrigard@gmail.com)
   
-**By Adelaida Barrera (adelaidabarrera@gmail.com), Natalia Mejía, (natimp555@gmail.com), Mariana Saldarriaga (m.saldarriaga15@gmail.com) and Isabel de Brigard (isabeldebrigard@gmail.com)**
-
 # ![](figures/twitterbird.png) What we set out to do
-
 
 This semester we seem to be uninterruptedly glued to our screens. From zoom, to R, more and more of our days are spent in front of our phones or computers. But this trend, though exacerbated by the unusual conditions of 2020, did not start with some flying rodent far away. Digital platforms have carved up more and more of our time, and seem to direct more of our actions. As policy students, we were interested in one instance where this seems to be happening very notably: the way twitter communicates, condenses, and shapes public discourse around salient policy issues -guess it’s not procrastination if you can call it research.  
 
