@@ -323,6 +323,15 @@ It is important to mention that inside our selected categories (political topics
 
 ## How would they be distributed if put in a single space? 
 
+
+We were interested in seeing how would these tweets be distributed if we placed them in a single shared space, a single scale. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular **position** about something. So we tried to create a scale based on the tweets discussing specific topics about which we could hypothesize these women would be expressing a position when tweeting about them. So, following the suggestion in Baerg & Lowe (2020)  of combining topic models and scaling to limit the policy issues at stake, we leveraged the models we had used before. For the individual accounts we tried to capture differences in political ideology by selecting tweets about the two political topics, while for the institutional accounts we tried to gather tweets on reproductive health (pregnancy interruption and such). We selected tweets with the highest ‘thetas’ (topic proportions) corresponding to these topics; some accounts were lost on the way and the number of document decreased. 
+
+For the scaling analysis we did not use individual tweets as separate texts or documents, but concatenated all the tweets by a single user into one string (one text), **as if** their ‘position’ on a topic were expressed by the sum of all their tweets on it. This is assuming, ultimately, that the tweeters express their position on these issues drop by drop, tweet by tweet. We did this because, otherwise, the “space” to be created by measuring differences in word uses between the thousands of tweets in question, which we tried and was very uninformative. 
+
+It is important to mention that inside our selected categories (political topics and reproductive rights) the accounts include information of other topics, hindering the precision of the analysis. We were not able to do a clean subset of the tweets only discussed one "real", clearly interpretable, topic. Perhaps a manual classification, a different unit of analysis or different models might be useful to improve precision.  
+
+For that reason it is not clear that we can interpret these scales as representing an  ideological spectrum, yet the scales do represent polarity in the way these accounts speak of these modeled topics, and allow us to identify how far are these accounts from one another other depending on their choice of words. 
+
 ### Tweets on politics 
 
 ```{r, fig.show = 'hold', echo=FALSE}
