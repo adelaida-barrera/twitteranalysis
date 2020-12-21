@@ -217,7 +217,7 @@ Some things caught our eye:
 
 ## Do these topics change in time? 
 
-After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. 
+After running the LDA model we wanted to observe if the topics change in time, se we plotted the proportion of documents from each topic by week from July to December of 2020. We analyzed the events that occurred during this period to get a better understanding of the trends the data presents.
 
 ### Individual accounts 
 ```{r, fig.show = 'hold', echo=FALSE}
@@ -249,6 +249,11 @@ Some things caught our eye:
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
+Now we move to positions! We want to know how each twitter account live in space and how they relate to each other. To do so, we scaled some accounts in one space based on the tweets discussing certain topics. The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics. 
+
+It is important to mention that inside our selected categories (political topics and reproductive health) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one topic. This is why, we believe the topic model has some limitations with twitter data and more manual classification is needed to improve precision. 
+
+
 ## How would they be distributed if put in a single space? 
 
 ### Tweets on politics 
@@ -257,13 +262,19 @@ Some things caught our eye:
 include_graphics("figures/12_scaling_political_ind.png")
 ```
 
+Analyzing the scale based on tweets discussing political topics, it is possible to observe that from the sample of 25 twitter accounts, only three of them position in the positive quadrant, one in 0 and the rest of them in the negative quadrant. These results imply that most of the twitter accounts selected, when discussing political topics, use similar vocabulary, so they are close to each other in the scale. 
+
+Lacadavidc, an activist, distances from the group positioning beyond -3, this could be due for her polemic positions against the women trans movement. In contrast, we observe alejaoficial, who positions almost in 1, she is a famous artist who advocates against women violence. The scale shows these two women, even though they talk about women´s rights, they do it using different vocabulary.
+
+
 ### Tweets on reproductive health
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/13_plot_reproductive_scale_ins.png")
 ```
-
 *What do the extremes of the scale seem to represent?*  
+
+The institutional accounts scale discussing reproductive rights topics show us an interesting account grouping. The accounts close to 0 and the positive quadrant are institutions that advocate for women´s rights: Women_ Equity, Women Commission Colombia, Women Secretary and ONU Women, so these accounts mainly use vocabulary related to women and their reproductive rights. In the middle, between -2 and 0, the spectrum opens more, and we can find activists twitter accounts, these accounts are close to each other which means they use similar vocabulary and discuss similar topics, for instance, regarding abortion and the LGBT community. The last group is the Constitutional Court and the Truth Commission, we believe they are the extreme left because they use a different language compared to the other institutions or activists accounts, and they discuss a variety of topics regarding reproductive rights beyond women. 
 
 
 ## How are they connected on Twitter?
