@@ -84,9 +84,77 @@ And then, we did it all over again for our institutional accounts. By this time,
 
 # ![](figures/twitterbird.png) What are these tweets about?
 
-We got our dfm for individual accounts and turned it into a stm corpus to run our topic model and defined 10 topics most prevalent in the tweets we had. And yes, we then did it again for the institutional accounts. We broadly identified what the 10 topics were for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. But all in all what we got seemed reasonable.  
+## What are the most common expressions in the network?
+
+Before modeling, we tried to visualize the data we had. We wanted to observe the data structures to look for text relations. Following certain techniques found online, like the one employed by Orduz (2018), we performed a network analysis. This will allow us to understand graphically the tweets text as a weighted network. 
+
+As a first exploration, we saw the pairwise relative occurrence of words. We did a bi-gram analysis for individuals and institutional accounts. 
+We created the bi-grams and did the respective cleaning of them (remove stopwords, https, emoticons, pair of words not relevant, etc.). Afterwards, we defined a weighted network from the bigram count and got our first graphs (for individuals and institutionals account):
+
+- Each word is going to represent a node.
+- Two words are going to be connected if they appear as a bigram.
+- The weight of an edge is the number of times the bigram appears in the corpus.
+
+We also add some additional information to the visualization. We set the sizes of the nodes and the edges by the degree and weight respectively. We used the function strength to get the weighted degree. 
+
+Moreover, we extract the biggest connected component of the network to understand the most frequent conversation between gender public opinion leaders -individuals and institutions- in Twitter. We compute the clusters with a big threshold (100) and also with a smaller threshold (50). The last allows us to get a more complex network.
+
+Finally, as Orduz (2018), we employ the Louvain Method for community detection, and to try to find clusters within the network. The precedent is an algorithm for detecting communities in networks. It evaluates how much more densely connected the nodes within a community are, compared to how connected they would be in a random network (neo4j, December 2020). It recursively merges communities into a single node and executes the modularity clustering on the condensed graphs.
+
+### Bi-gram of individuals account
+
+Among the individuals account, we observe that the pair of words connected with higher weight within the network are (among ohters): 
+- sexual, violence, work, harassment
+- persons, women, trans
+- human, rights
+- elites, political, narcotrafic
+- democracia, if not, destroy
+
+This means that gender conversation leaders in Twitter tweet mostly about sexual violence and harassment at work, trans women, human right, etc. The last will give us clues for our models' topic. 
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/15_plot_bigram_weight_degree_individuals.png")
+``` 
+
+With a big threshold (100), the biggest connected compound is not a surprise. However, when we decrease the threshold, we see a more complex network of words. It seems that most of the tweets of gender public opinion leaders are build on progressive movements who advocates for the rights of women and, particularly, trans women who have been killed. 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/16_plot_bigram_component100_individuals.png")
+include_graphics("figures/17_plot_bigram_component50_individuals.png")
+``` 
+
+Finally, the community detection results for individuals account show that four groups where identified and the modularity (measure for the “quality” of certain partition of the nodes in a network like clusterings) is 0.5 within the biggest connected compund of the word network. This result doesn't seem either good or bad (better if closer to 1). However, the network we believe the 0.5 modularity is a good number to show the quality of the conversation word cluster. 
+
+
+### Bi-gram of institutionals account
+
+The following pairwise of words are the most occurrent and relevant within institutions in gender conversations:
+- sexual, violence, intrafamily, abuse
+- persons, trans, lgbt, lgbti
+- rights, humans, sexuals
+- women, victims, indigenous
+- digital, channels
+- armed, conflict
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/19_plot_bigram_weight_degree_institutions.png")
+``` 
+
+The following graphs allow us to conclude that the conversation among institutions, who aim gender equality -in their own way- in Colombia, is mainly about women's victims. Specifically, rural, young and indigenous women. The last seems reasonable since structural inequalities affect the most indigenous and rural women. Furthermore, the armed conflict 
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/20_plot_bigram_component100_institutions.png")
+include_graphics("figures/21_plot_bigram_component50_institutions.png")
+``` 
+
+The community detection results show that 2 groups where identified and the modularity is 0.22. Institutions have a smaller modularity then individuals. It seems that individuals conversation is BETTER clustered than institutional discourse on Twitter. 
+
+### Conclusions 
+Conversations among activists, political leaders, writers, and all around opinion shapers from Colombia, including private or public institutions and NGOs in defense of women's rights, are center in women's right. Who would say? What a surprise! Wihtin individuals account, it seems that work harassement and sexual violence are in the center of the conversation. On the contrary, institutions are more focused on exposing the injustices towards indigenous and rural women. 
+
 
 ## What topics can we identify? 
+
+We got our dfm for individual accounts and turned it into a stm corpus to run our topic model and defined 10 topics most prevalent in the tweets we had. And yes, we then did it again for the institutional accounts. We broadly identified what the 10 topics were for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. But all in all what we got seemed reasonable.  
 
 ### Topics in institutional accounts
 
@@ -213,3 +281,11 @@ include_graphics("figures/13_plot_reproductive_scale_ins.png")
 ## How do they feel about the issue of sexual work? 
 
 # ![](figures/twitterbird.png) Final remarks
+
+# ![](figures/twitterbird.png) References
+
+https://juanitorduz.github.io/text-mining-networks-and-visualization-plebiscito-tweets/
+
+https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/#:~:text=The%20Louvain%20method%20for%20community,for%20detecting%20communities%20in%20networks.&text=The%20Louvain%20algorithm%20is%20a,clustering%20on%20the%20condensed%20graphs.
+
+
