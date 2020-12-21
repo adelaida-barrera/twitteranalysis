@@ -13,10 +13,10 @@ library(rtweet)
 
 # API authorization 
 rtweet::create_token(app = "aletheia_hertie", 
-                     consumer_key = "dUccFFYUBCdImYFvQeLVNV3ij",
-                     access_secret = "g5Zpp9lmwPfdW5JB2l4srFu8Y1BGBeNvt3BkDjcUaJJrk",
-                     access_token = "10536312-kRxNG26Yo9SWavI8ksHzOs1rhw9PGA90Kp5ioIelD",
-                     consumer_secret = "RPLTQRvGix0sK6QKkNS0ZJq6y1lsc5nR5OGDahV77mydUYTplq")
+                     consumer_key = "XXX",
+                     access_secret = "XXX",
+                     access_token = "XXX",
+                     consumer_secret = "XXX")
 
 ```
 
