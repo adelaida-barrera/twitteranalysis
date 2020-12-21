@@ -292,12 +292,12 @@ The institutional accounts scale discussing reproductive rights topics show us a
 
 # ![](figures/twitterbird.png) How do they feel about controversial topics?
 
-```{r}
+```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/22_sentiment_olddict_individuals.png")
 include_graphics("figures/23_sentiment_newdict_individuals.png")
 ```
 
-```{r}
+```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/24_sentiment_olddict_institutions.png")
 include_graphics("figures/25_sentiment_newdict_institutions.png")
 ```
