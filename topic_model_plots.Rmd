@@ -48,6 +48,21 @@ The LDA model calculates the probability of each word being generated from each 
 
 We can broadly identify what the 10 topics are for both the individual and the institutional accounts, although the model does not perfectly classify the documents according to our posterior interpretation. 
 
+Topics in individual accounts:
+
+* Topic 1: Media & equality 
+* Topic 2: Public opinion
+* Topic 3: State violence 
+* Topic 4: Human rights, women's rights
+* Topic 5: Sexual violence, gender violence 
+* Topic 6: National politics 
+* Topic 7: Journalism  
+* Topic 8: Political violence 
+* Topic 9: Everyday life & feminism
+* Topic 10: Judicial  
+
+Topics in institutional accounts: 
+
 # Most common words in each topic 
 
 ```{r}
@@ -103,7 +118,7 @@ frequent_words_ind <- model_top_terms %>%
   theme(text = element_text(size = 9))
 
 # Save plot for report  
-ggsave(frequent_words_ind, file = "figures/5_frequent_words_ind.png", height = 4, width = 7)
+#ggsave(frequent_words_ind, file = "figures/5_frequent_words_ind.png", height = 4, width = 7)
 ```
 
 ```{r}
@@ -120,7 +135,7 @@ topic_labels_i <- c("Violence",
                     "Armed conflict",
                     "Gender & diversity",
                     "Women",
-                    "Truth commission",
+                    "Truth comission",
                     "Reproductive rights")
 
 # Get tidy object 
@@ -157,7 +172,7 @@ frequent_words_ins
 
 # Save to include in report 
 
-ggsave(frequent_words_ins, file = "figures/6_frequent_words_ins.png", height = 4, width = 7)
+#ggsave(frequent_words_ins, file = "figures/6_frequent_words_ins.png", height = 4, width = 7)
 
 ```
 
@@ -216,7 +231,7 @@ topics_ind_plot <- gamma_terms %>%
 
 topics_ind_plot
 
-ggsave(topics_ind_plot, file = "figures/7_prevalence_topics_ind.png",  height = 4, width = 7)
+#ggsave(topics_ind_plot, file = "figures/7_prevalence_topics_ind.png",  height = 4, width = 7)
 
 ```
 
@@ -272,7 +287,7 @@ topics_ins_plot <- gamma_terms_ins %>%
 
 topics_ins_plot
 
-ggsave(topics_ins_plot, file = "figures/8_prevalence_topics_ins.png", height = 4, width = 7)
+#ggsave(topics_ins_plot, file = "figures/8_prevalence_topics_ins.png", height = 4, width = 7)
 
 ```
 
@@ -346,7 +361,7 @@ topics_in_time_ind <- weekly_topics %>%
                      name = "Topic")
 
 # Save for report 
-ggsave(topics_in_time_ind, file = "figures/9_topics_in_time_ind.png", height = 7, width = 11)
+#ggsave(topics_in_time_ind, file = "figures/9_topics_in_time_ind.png", height = 7, width = 11)
 
 # Closer look at the dynamic between women's rights discourse and national politics  
 
@@ -365,7 +380,7 @@ topics_zoom_ind <- weekly_topics %>%
   scale_color_manual(values = c(colors),
                      name = "Topic")
 
-ggsave(topics_zoom_ind, file = "figures/11_topics_zoom_ind.png", height = 7, width = 11)
+#ggsave(topics_zoom_ind, file = "figures/11_topics_zoom_ind.png", height = 7, width = 11)
 
 ```
 
@@ -450,7 +465,7 @@ topics_in_time_ins <- weekly_topics_ins %>%
 
 # Save for report 
 
-ggsave(topics_in_time_ins, file = "figures/10_topics_in_time_inst.png", height = 8, width = 15)
+#ggsave(topics_in_time_ins, file = "figures/10_topics_in_time_inst.png", height = 8, width = 15)
 
 ```
 
@@ -483,20 +498,20 @@ plot_topic_occupations <- ggplot(plot_topic_occupations,
         legend.text = element_text(size = 10)) +
   guides(fill = guide_legend(keywidth = 0.7, keyheight = 0.7))
 
-ggsave(plot_topic_occupations, file = "figures/7_1_plot_topic_occupations.png",
-       height = 7,
-       width = 11)
+#ggsave(plot_topic_occupations, file = "figures/7_1_plot_topic_occupations.png",
+  #     height = 7,
+   #    width = 11)
 
 ```
 
-# Gathering a subset of the tweets that mainly talk about reproductive health.
+# Gathering a subset of the tweets that mainly talk about reproductive rights
 
 ```{r}
 
 tweets_on_rephealth <- institutions_wgammas %>% 
   group_by(topic) %>% 
   filter(gamma > 0.4,
-         topic %in% c(8))
-save(tweets_on_rephealth, file = "data/ind_tweets_on_rephealth")
+         topic %in% c(10))
+save(tweets_on_rephealth, file = "data/ins_tweets_on_reprights.RData")
 
 ```
