@@ -290,7 +290,17 @@ The institutional accounts scale discussing reproductive rights topics show us a
 ## How are they connected on Twitter?
 
 
-# ![](figures/twitterbird.png) How do they feel about controversial topics?
+# ![](figures/twitterbird.png) How do they feel?
+
+After understanding how the accounts are positioned in space and how they relate with each other, we want to see how positive or negative is the vocabulary they use. To achieve this, we performed a sentiment analysis, there are different ways to do it, for instance, scaling models, classification models or dictionary models; we chose the last option! 
+
+We began by looking for a dictionary to analyze our data, it was quite a challenge, we must say, to find a good quality dictionary in Spanish. We, finally, picked the Full-Strength Lexicon dictionary (Perez, V., et al, 2012). 
+
+Using quanteda, we applied this dictionary to our corpus to both the personal and institutional accounts. As the personal accounts contained too many documents, we grouped them by main occupation; we didn´t have this issue with the institutional accounts which were analyzed individually. 
+Exploring the results with the first dictionary we didn´t see a significant difference between the positive and negative score. So, we decided to perform a qualitative analysis of the dictionary, we found that the most frequent words used by the accounts in each topic (information gathered in the topic model section) were not included in the dictionary we selected. Thus, the words were included in the dictionary to improve the analysis. The results after running again the sentiment analysis improved.
+
+Lets see what we got: 
+
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/22_sentiment_olddict_individuals.png")
