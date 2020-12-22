@@ -355,6 +355,8 @@ The institutional accounts scale discussing reproductive rights topics show us a
 
 # ![](figures/twitterbird.png) How do they feel?
 
+### Sentiment Analysis with Full-Strength Lexicon and Improved Dictionary
+
 Previously, we explore how the accounts are positioned in space and how they relate to each other. Now we want to see how positive or negative is the vocabulary they use. To achieve this, we performed a sentiment analysis. There are different ways to do it, for instance, scaling models, classification models or dictionary models; we chose the last option! 
 
 We began by looking for a dictionary to analyze our data. It was a challenge to find a good quality dictionary in Spanish. We choosed the Full-Strength Lexicon dictionary (Perez, V., et al, 2012) to perfom our sentimental analysis. 
@@ -382,6 +384,19 @@ include_graphics("figures/25_sentiment_newdict_institutions.png")
 The institution's accounts that use the highest amount of positive and negative words are Legal Abortion Colombia, the Truth Commission, and the Women´s Secretary.   
 
 The improved dictionary increased the sample from 1.200 to 5.000 words. Also, the variation within scores changed. We identified new peaks for positive words in Women Equity, Women Afro, Pacific Route, and Women´s Link accounts. Again, we believe the inclusion of the new words improved the quality of the sentiment analysis and shows us that the personal and institutional accounts tend to use a positive language in their tweets.  
+
+### Sentiment analysis with NRC dictionary
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/27_posneg_nrc_individuals.png")
+include_graphics("figures/26_emotions_individuals.png")
+```
+
+```{r, fig.show = 'hold', echo=FALSE}
+include_graphics("figures/27_posneg_nrc_individuals.png")
+include_graphics("figures/26_emotions_individuals.png")
+```
+
 
 # ![](figures/twitterbird.png) Final remarks
 
