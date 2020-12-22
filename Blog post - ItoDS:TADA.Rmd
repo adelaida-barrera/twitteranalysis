@@ -392,10 +392,12 @@ include_graphics("figures/27_posneg_nrc_individuals.png")
 include_graphics("figures/26_emotions_individuals.png")
 ```
 
+
 ```{r, fig.show = 'hold', echo=FALSE}
-include_graphics("figures/27_posneg_nrc_individuals.png")
-include_graphics("figures/26_emotions_individuals.png")
+include_graphics("figures/28_posneg_nrc_institutions.png")
+include_graphics("figures/29_emotions_institutions.png")
 ```
+Notar instituciones usan un mayor porcentage de trust que cuentas individuales
 
 
 # ![](figures/twitterbird.png) Final remarks
