@@ -387,6 +387,10 @@ The improved dictionary increased the sample from 1.200 to 5.000 words. Also, th
 
 ### Sentiment analysis with NRC dictionary
 
+We wanted to try a new dictionary to test the data again and verify the accuracy of the sentiment analysis. This time we used the NRC dictionary, which has 14.182 words and contains sentiment positive-negative and eight emotions (anger, anticipation, disgust, fear, joy, sadness, surprise, trust). 
+
+These are the results:
+
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/27_posneg_nrc_individuals.png")
 include_graphics("figures/26_emotions_individuals.png")
