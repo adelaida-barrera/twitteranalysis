@@ -115,7 +115,7 @@ str(nrc_vector2)
 nrc_vector2$sentiment <- nrc_vector2$positive-nrc_vector2$negative
 str(nrc_vector2)
 
-# let's add the name of the presidents
+# Add the docnames
 nrc_vector2$docnames_corpus_sentim <- docnames(corpus_sentim)
 str(nrc_vector2)
 
