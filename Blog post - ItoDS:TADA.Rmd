@@ -395,13 +395,15 @@ These are the results:
 include_graphics("figures/27_posneg_nrc_individuals.png")
 include_graphics("figures/26_emotions_individuals.png")
 ```
+Coherent with the results from the improved Lexicon dictionary, individual accounts have predominantly a positive use of vocabulary. The tweets have 55% positive sentiment in contrast with 45% negative sentiment. 
 
+Regarding the emotions, trust leads with almost 20%, followed by fear, sadness, and anger. We can evidence that the emotion with highest percentage is positive, nevertheless, negative sentiment holds a significant share. We could bring to the analysis the bigrams which showed that the most common words connected to women were sexual, violence, harassment, trans, murder; all words with a negative sentiment. 
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/28_posneg_nrc_institutions.png")
 include_graphics("figures/29_emotions_institutions.png")
 ```
-Notar instituciones usan un mayor porcentage de trust que cuentas individuales
+
 
 
 # ![](figures/twitterbird.png) Final remarks
