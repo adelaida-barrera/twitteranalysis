@@ -12,31 +12,46 @@ output:
 
 On the basis of tweets gathered from individual and institutional accounts, we offer here a mostly descriptive exploration of the public discourse around feminism and gender issues in the Colombian context. After some remarks about the selection of the sample, we identify the most relevant topics in our data with bi-grams and topic modelling. We then explore connections between the accounts and relative positions on some topics, with scaling. Finally, with sentiment analysis, we explore how these tweeters feel about certain controversial topics.  
 
-## The team 
+## The team & the clases 
 
 All of us contributed to every aspect of the project, from the initial idea to the n-th revision of the markdown. This amazing blog post you are about to read, the thinking behind it, as well as the analysis of all our results were a joint effort. However, if you have questions about specific sections, here is who you should go to:
 <br>
 
 Reach out to Adelaida Barrera (adelaidabarrera@gmail.com) if you are interested in  
-- The selection, scraping and cleaning of individual accounts  
-- Topic modeling  
-- Scaling   
+* The selection, scraping and cleaning of individual accounts  
+* Topic modeling  
+* Scaling   
 
 Contact Natalia Mejía (natimp555@gmail.com) if you would like to know more about     
-- The initial selection of accounts   
-- Data exploring for topic models   
-- Our initial sentiment analysis  
+* The initial selection of accounts   
+* Data exploring for topic models   
+* Our initial sentiment analysis  
 
 Write to Mariana Saldarriaga (m.saldarriaga15@gmail.com) if you are curious about  
-- Bi-grams  
-- Network analysis  
-- Sentiment analysis   
+* Bi-grams  
+* Network analysis  
+* Sentiment analysis   
 
 Drop Isabel de Brigard (isabeldebrigard@gmail.com) a line if you want to hear about   
-- The selection, scraping and cleaning of institutional accounts  
-- Our initial bi-grams  
-- Topic modeling for institutional accounts  
-  
+* The selection, scraping and cleaning of institutional accounts  
+* Our initial bi-grams  
+* Topic modeling for institutional accounts  
+
+This is a quite long report since, prior authorization by the instructor, it corresponds to the final paper of both the Intro to Data Science and Text as Data courses. The distribution of the work is as follows: 
+
+**Intro DS:**
+
+* R project and [GitHub](https://github.com/adelaida-barrera/twitteranalysis) setup
+* Twitter scraping 
+* Data cleaning (including regular expressions)
+* Scaling 
+
+**Text as data:**
+
+* Bi-gram analysis
+* Topic modelling 
+* Sentiment analyis 
+
 # ![](figures/twitterbird.png) What we set out to do
 
 This semester we seem to be uninterruptedly glued to our screens. From zoom, to R, more and more of our days are spent in front of our phones or computers. But this trend, though exacerbated by the unusual conditions of 2020, did not start with some flying rodent far away. Digital platforms have carved up more and more of our time, and seem to direct more of our actions. As policy students, we were interested in one instance where this seems to be happening very notably: the way twitter communicates, condenses, and shapes public discourse around salient policy issues -guess it’s not procrastination if you can call it research.  
@@ -395,32 +410,32 @@ Fiuuu this was a long journey; we are almost done! To conclude our project, we w
 
 Methodological remarks
 
-+Gathering data from Twitter is easy but challenging to work with: 
--The text is really short
--Tweets contain a lot of noise like emoticons, @, htlm that is necessary to clean
--Twitter accounts tend to cover a lot of topics, hence, filtering the tweets into specific topics is difficult
+* Gathering data from Twitter is easy but challenging to work with: 
+** The text is really short
+** Tweets contain a lot of noise like emoticons, @, htlm that is necessary to clean
+** Twitter accounts tend to cover a lot of topics, hence, filtering the tweets into specific topics is difficult
 
-+Institutional accounts have more uniform content, while personal accounts cover a diverse universe of topics
+* Institutional accounts have more uniform content, while personal accounts cover a diverse universe of topics
 
-+For the topic model we could have included more topics to improve the statistical performance, but this would have led to less interpretable results. We prioritized the interpretable side by choosing 10 topics. 
+* For the topic model we could have included more topics to improve the statistical performance, but this would have led to less interpretable results. We prioritized the interpretable side by choosing 10 topics. 
 
-+It could be interesting to explore new types of models for the analysis of tweets. For instance, giving a topic to each document instead of a probability of topic, as the text is so short this approach is not reasonable.
+* It could be interesting to explore new types of models for the analysis of tweets. For instance, giving a topic to each document instead of a probability of topic, as the text is so short this approach is not reasonable.
 
-+This type of project has a high dependency on language and the development for Spanish is low compared with other languages: few stopwords to clean the data, few dictionaries.
+* This type of project has a high dependency on language and the development for Spanish is low compared with other languages: few stopwords to clean the data, few dictionaries.
 
-+For the sentiment analysis the quality of the dictionary is essential, so it is important to verify the content of the dictionary or compare the results of more than one dictionary to select the best one.
+* For the sentiment analysis the quality of the dictionary is essential, so it is important to verify the content of the dictionary or compare the results of more than one dictionary to select the best one.
 
-+For the network and sentiment analysis we found more resources for Python than R
+* For the network and sentiment analysis we found more resources for Python than R
 
 Content remarks:
 
-+The results of each section of the project are consistent with our initial intuition on the subject. 
+* The results of each section of the project are consistent with our initial intuition on the subject. 
 
-+The topics for the individual accounts were women´s rights, State violence, and journalism. And for the institutional accounts Women, institutional events, and social policy.
+* The topics for the individual accounts were women´s rights, State violence, and journalism. And for the institutional accounts Women, institutional events, and social policy.
 
-+In the scaling exercise we observed that the personal accounts use similar vocabulary when they discuss political topics, and the institutional accounts positioned in three different groups depending on the variety of topics discussed beyond reproductive health topics. 
+* In the scaling exercise we observed that the personal accounts use similar vocabulary when they discuss political topics, and the institutional accounts positioned in three different groups depending on the variety of topics discussed beyond reproductive health topics. 
 
-+The sentiment analysis showed a positive use of vocabulary from the personal and institutional accounts. A highlight is the higher use of positive language of writers, journalists, and activists. 
+* The sentiment analysis showed a positive use of vocabulary from the personal and institutional accounts. A highlight is the higher use of positive language of writers, journalists, and activists. 
 
 # ![](figures/twitterbird.png) References
 
