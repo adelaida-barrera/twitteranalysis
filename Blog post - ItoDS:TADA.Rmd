@@ -261,7 +261,7 @@ A couple of interesting outcomes:
 ### What is each topic about? Word-topic probabilities
 
 
-Based on the matrix of the probability of each word being generated from each topic (betas),some things caught our eye:  
+Based on the matrix of the probability of each word being generated from each topic ("betas"),some things caught our eye:  
 
 
 ```{r, fig.show = 'hold', echo=FALSE}
