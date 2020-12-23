@@ -313,18 +313,14 @@ Some things caught our eye:
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-Now we move to positions! Similar to a topic model but with only two topics, we tried to see how would these tweets be distributed if we placed them in a single shared space. Who would be closer to who in the way they talk. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular 
-**position** about something. So we tried to create a scale based on the tweets discussing specific topics about which we could hypothesize these womens would be expressing a position when tweeting about them. 
-
-The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics.   
-
-It is important to mention that inside our selected categories (political topics and reproductive rights) the accounts include information of other topics, hindering the precision of the analysis. It was not possible to do a clean subset of the twitter accounts that only discussed one "real", clearly interpretable, topic. This is why, we believe the topic model has some limitations with Twitter data and more manual classification might be needed to improve precision.  
+Now we move to positions! 
 
 
 ## How would they be distributed if put in a single space? 
 
+Similar to a topic model but with only two topics, we tried to see how would these tweets be distributed if we placed them in a single shared space. Who would be closer to who in the way they talk. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular **position** about something. So we tried to create a scale based on the tweets discussing specific topics about which we could hypothesize these womens would be expressing a position when tweeting about them. 
 
-We were interested in seeing how would these tweets be distributed if we placed them in a single shared space, a single scale. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular **position** about something. So we tried to create a scale based on the tweets discussing specific topics about which we could hypothesize these women would be expressing a position when tweeting about them. So, following the suggestion in Baerg & Lowe (2020)  of combining topic models and scaling to limit the policy issues at stake, we leveraged the models we had used before. For the individual accounts we tried to capture differences in political ideology by selecting tweets about the two political topics, while for the institutional accounts we tried to gather tweets on reproductive health (pregnancy interruption and such). We selected tweets with the highest ‘gammas’ (topic proportions) corresponding to these topics; some accounts were lost on the way and the number of document decreased. 
+Following the suggestion in Baerg & Lowe (2020) of combining topic models and scaling to limit the policy issues at stake, we leveraged the models we had used before. For the individual accounts we tried to capture differences in political ideology by selecting tweets about the two political topics, while for the institutional accounts we tried to gather tweets on reproductive health (pregnancy interruption and such). We selected tweets with the highest "gammas" (topic proportions) corresponding to these topics; some accounts were lost on the way and the number of document decreased. 
 
 For the scaling analysis we did not use individual tweets as separate texts or documents, but concatenated all the tweets by a single user into one string (one text), **as if** their ‘position’ on a topic were expressed by the sum of all their tweets on it. This is assuming, ultimately, that the tweeters express their position on these issues drop by drop, tweet by tweet. We did this because, otherwise, the “space” to be created by measuring differences in word uses between the thousands of tweets in question, which we tried and was very uninformative. 
 
@@ -340,8 +336,7 @@ include_graphics("figures/12_scaling_political_ind.png")
 
 Analyzing the scale based on tweets discussing political topics, it is possible to observe that from the sample of 25 twitter accounts, only three of them position in the positive quadrant, one in 0 and the rest of them in the negative quadrant. These results imply that most of the twitter accounts selected, when discussing political topics, use similar vocabulary, so they are close to each other in the scale. 
 
-Lacadavidc, an activist, distances from the group positioning beyond -3, this could be due for her polemic positions against the women trans movement. In contrast, we observe alejaoficial, who positions almost in 1, she is a famous artist who advocates against women violence. The scale shows these two women, even though they talk about women´s rights, they do it using different vocabulary.  
-
+Lacadavidc, an left-wing 'raical feminist' activist, distances from the group positioning beyond -3, this could be due for her polemic positions against the women trans movement. In contrast, we observe alejaoficial, who positions almost in 1, she is a famous artist who advocates against women violence. The scale shows these two women, even though they talk about women´s rights, they do it using different vocabulary.  
 
 ### Tweets on reproductive health
 
