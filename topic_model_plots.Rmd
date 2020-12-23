@@ -503,7 +503,16 @@ plot_topic_occupations <- ggplot(plot_topic_occupations,
    #    width = 11)
 
 ```
+# Gathering a subset of the tweets that mainly talk about politics.
+```{r}
 
+tweets_on_politics <- non_congress_wgammas %>% 
+  group_by(topic) %>% 
+  filter(gamma > 0.6,
+         topic %in% c(3,6,8))
+save(tweets_on_politics, file = "data/ind_tweets_on_politics")
+
+```
 # Gathering a subset of the tweets that mainly talk about reproductive rights
 
 ```{r}
@@ -512,6 +521,6 @@ tweets_on_rephealth <- institutions_wgammas %>%
   group_by(topic) %>% 
   filter(gamma > 0.4,
          topic %in% c(10))
-save(tweets_on_rephealth, file = "data/ins_tweets_on_reprights.RData")
+# save(tweets_on_rephealth, file = "data/ins_tweets_on_reprights.RData")
 
 ```
