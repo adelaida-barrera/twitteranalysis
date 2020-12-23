@@ -12,30 +12,36 @@ output:
 
 On the basis of tweets gathered from individual and institutional accounts, we offer here a mostly descriptive exploration of the public discourse around feminism and gender issues in the Colombian context. After some remarks about the selection of the sample, we identify the most relevant topics in our data with bi-grams and topic modelling. We then explore connections between the accounts and relative positions on some topics, with scaling. Finally, with sentiment analysis, we explore how these tweeters feel about certain controversial topics.  
 
-## The team & the clases 
+## The team 
 
 All of us contributed to every aspect of the project, from the initial idea to the n-th revision of the markdown. This amazing blog post you are about to read, the thinking behind it, as well as the analysis of all our results were a joint effort. However, if you have questions about specific sections, here is who you should go to:
 <br>
 
-Reach out to Adelaida Barrera (adelaidabarrera@gmail.com) if you are interested in  
+Reach out to **Adelaida Barrera** (adelaidabarrera@gmail.com) if you are interested in  
+
 * The selection, scraping and cleaning of individual accounts  
 * Topic modeling  
 * Scaling   
 
-Contact Natalia Mejía (natimp555@gmail.com) if you would like to know more about     
+Contact **Natalia Mejía** (natimp555@gmail.com) if you would like to know more about 
+
 * The initial selection of accounts   
 * Data exploring for topic models   
 * Our initial sentiment analysis  
 
-Write to Mariana Saldarriaga (m.saldarriaga15@gmail.com) if you are curious about  
+Write to **Mariana Saldarriaga** (m.saldarriaga15@gmail.com) if you are curious about  
+
 * Bi-grams  
 * Network analysis  
 * Sentiment analysis   
 
-Drop Isabel de Brigard (isabeldebrigard@gmail.com) a line if you want to hear about   
+Drop **Isabel de Brigard** (isabeldebrigard@gmail.com) a line if you want to hear about   
+
 * The selection, scraping and cleaning of institutional accounts  
 * Our initial bi-grams  
 * Topic modeling for institutional accounts  
+
+## The clases 
 
 This is a quite long report since, prior authorization by the instructor, it corresponds to the final paper of both the Intro to Data Science and Text as Data courses. The distribution of the work is as follows: 
 
