@@ -14,16 +14,28 @@ On the basis of tweets gathered from individual and institutional accounts, we o
 
 ## The team 
 
-Although all of us contributed to every aspect of the project, from the initial idea to the n-th revision of the markdown, each one took the lead on certain sections:  
+All of us contributed to every aspect of the project, from the initial idea to the n-th revision of the markdown. This amazing blog post you are about to read, the thinking behind it, as well as the analysis of all our results were a joint effort. However, if you have questions about specific sections, here is who you should go to:
 <br>
 
-Adelaida Barrera (adelaidabarrera@gmail.com)
+Reach out to Adelaida Barrera (adelaidabarrera@gmail.com) if you are interested in  
+- The selection, scraping and cleaning of individual accounts  
+- Topic modeling  
+- Scaling   
 
-Natalia Mejía (natimp555@gmail.com)
+Contact Natalia Mejía (natimp555@gmail.com) if you would like to know more about     
+- The initial selection of accounts   
+- Data exploring for topic models   
+- Our initial sentiment analysis  
 
-Mariana Saldarriaga (m.saldarriaga15@gmail.com)
+Write to Mariana Saldarriaga (m.saldarriaga15@gmail.com) if you are curious about  
+- Bi-grams  
+- Network analysis  
+- Sentiment analysis   
 
-Isabel de Brigard (isabeldebrigard@gmail.com)
+Drop Isabel de Brigard (isabeldebrigard@gmail.com) a line if you want to hear about   
+- The selection, scraping and cleaning of institutional accounts  
+- Our initial bi-grams  
+- Topic modeling for institutional accounts  
   
 # ![](figures/twitterbird.png) What we set out to do
 
