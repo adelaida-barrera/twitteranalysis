@@ -1,0 +1,29 @@
+---
+title: "gather_tweets"
+author: "Adelaida Barrera"
+date: "11/20/2020"
+output: html_document
+---
+
+```{r}
+
+library(rtweet)
+
+# Read list of accounts to scrape 
+accounts_feminists <- read_csv("data/twitter_accounts_fem.csv")
+
+# Gather last 3200 tweets from each account 
+feminists <- rtweet::get_timeline(accounts_feminists$username, n = 3200)
+
+# Modify feminists dataframe in order to do left_join with tweets df
+accounts_feminists <- accounts_feminists %>% 
+  rename(screen_name = username) %>% 
+  mutate(screen_name = str_remove(screen_name, "@"))
+  
+# Add covariates included in initial list to tweets df 
+feminists <- left_join(feminists, accounts_feminists, by = "screen_name")
+
+save(feminists, file = "data/tweets_feminists.RData")
+
+```
+
