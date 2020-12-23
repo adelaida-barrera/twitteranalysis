@@ -348,16 +348,15 @@ include_graphics("figures/12_scaling_political_ind.png")
 
 Analyzing the scale based on tweets discussing political topics, it is possible to observe that from the sample of 25 twitter accounts, only three of them position in the positive quadrant, one in 0 and the rest of them in the negative quadrant. These results imply that most of the twitter accounts selected, when discussing political topics, use similar vocabulary, so they are close to each other in the scale. 
 
-Lacadavidc, an left-wing 'raical feminist' activist, distances from the group positioning beyond -3, this could be due for her polemic positions against the women trans movement. In contrast, we observe alejaoficial, who positions almost in 1, she is a famous artist who advocates against women violence. The scale shows these two women, even though they talk about women´s rights, they do it using different vocabulary.  
+Lacadavidc, an left-wing 'raical feminist' activist, distances from the group positioning beyond -3, this could be due for her polemic positions against the women trans movement. In contrast, we observe alejaoficial, who positions almost in 1, she is a famous artist who advocates against women violence. Also at the right side of the scale is Angela Anzola, a right-wing former head of the Womens' Secretariat in Bogotá. The scale shows these  women talk about political issues it using different vocabulary. 
 
 ### Tweets on reproductive health
 
 ```{r, fig.show = 'hold', echo=FALSE}
 include_graphics("figures/13_plot_reproductive_scale_ins.png")
 ```
-*What do the extremes of the scale seem to represent?*  
 
-The institutional accounts scale discussing reproductive rights topics show us an interesting account grouping. The accounts close to 0 and the positive quadrant are institutions that advocate for women´s rights: Women_ Equity, Women Commission Colombia, Women Secretary and ONU Women, so these accounts mainly use vocabulary related to women and their reproductive rights. In the middle, between -2 and 0, the spectrum opens more, and we can find activists twitter accounts, these accounts are close to each other which means they use similar vocabulary and discuss similar topics, for instance, regarding abortion and the LGBT community. The last group is the Constitutional Court and the Truth Commission, we believe they are the extreme left because they use a different language compared to the other institutions or activists accounts, and they discuss a variety of topics regarding reproductive rights beyond women.  
+The institutional accounts scale discussing reproductive rights topics show us an interesting account grouping. The accounts close to 0 and the positive quadrant are institutions that advocate for women´s rights in a very 'isntitutionalized' and general manner: Women_ Equity, Women Commission Colombia, Women Secretary and ONU Women. In the middle, between -2 and 0, the spectrum opens more and sems organized by bundles of issues. From right to left,  we can find activits from political movements, LGBT activists and pro-choice organizations dealing with abortion debates. The last groups  to the lefy are the Constitutional Court and the Truth Commission, we believe they are the extreme left because they use a different language compared to the other institutions or activists accounts, and they discuss a variety of topics regarding reproductive rights beyond women.  
 
 
 # ![](figures/twitterbird.png) How do they feel?
