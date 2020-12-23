@@ -313,7 +313,7 @@ Some things caught our eye:
 
 # ![](figures/twitterbird.png) How do they relate and differ from each other?
 
-Now we move to positions! Similar to a topic model but with only two topics, tried to see how would these tweets be distributed if we placed them in a single shared space. Who would be closer to who in the way they talk. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular 
+Now we move to positions! Similar to a topic model but with only two topics, we tried to see how would these tweets be distributed if we placed them in a single shared space. Who would be closer to who in the way they talk. This technique is particularly used to place speakers in an ideological/political scale, since we are assuming here that the choice of words they do is expressing a particular 
 **position** about something. So we tried to create a scale based on the tweets discussing specific topics about which we could hypothesize these womens would be expressing a position when tweeting about them. 
 
 The scale allows us to identify how close is each account from each other depending on the vocabulary they use regarding a topic, in this case we selected political topics and reproductive health topics.   
