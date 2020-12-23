@@ -1,0 +1,16 @@
+---
+title: "Untitled"
+author: "Adelaida Barrera"
+date: "12/21/2020"
+output: html_document
+---
+
+## Choosing accounts and scraping the data 
+
+Our initial intuition was that certain twitter accounts shape public discourse and that gathering those would give us a balanced and relatively complete picture of what most twitter-talk was about. This is partly the idea behind the [*Cifras y conceptos*](https://cifrasyconceptos.com/productos-panel-de-opinion/), opinion leaders panel, that traces the opinion of various individuals on a wide range of topics. These opinion leaders, they say, “differ from public opinion in general, because they are the ones who guide the climate of opinion, have the capacity for foresight and influence political issues and issues on the national agenda” and so tracing their points of view should be telling of more than their personal standing on a given topic.  
+
+```{r}
+getwd()
+load("data/")
+
+```
